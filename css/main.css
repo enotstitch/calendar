@@ -1,0 +1,93 @@
+:root {
+  --text-color: #665800;
+  --bg-color: #fffef4;
+  --accent-color: #fede31;
+  --second-accent-color: #ffff99;
+  --error-color: #c80000;
+  --placeholder-color: #bebebe;
+  --border-color: #e3dcb2;
+  --gray-color: #b2b4b4;
+  --dark-gray-color: #434c4e;
+  --light-color: #ffffff;
+  --dark-color: #000000;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 300;
+  src: url('../fonts/Roboto-Light.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 400;
+  src: url('../fonts/Roboto-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 700;
+  src: url('../fonts/Roboto-Bold.woff') format('woff');
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  font-size: 19px;
+  height: 100%;
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+input {
+  all: unset;
+}
+
+.btn-reset {
+  border: none;
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.calendar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--bg-color);
+}
+
+.calendar__form {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.calendar-date {
+  border: 0.5px solid var(--border-color);
+  padding: 5px;
+}
+
+.calendar-date__text {
+  color: var(--dark-gray-color);
+  font-size: 19px;
+  font-weight: 300;
+  text-transform: uppercase;
+  user-select: none;
+}
