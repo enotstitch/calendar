@@ -12,20 +12,22 @@
 <body>
 
   <div class="calendar">
-    <form class="calendar__form" action="#">
-
-      <div class="calendar__date calendar-date">
-        <span class="calendar-date__text">
-          Дата от
-        </span>
-        <input class="calendar-date__input" type="text" name="date-start" id="date-start">
+    <form class="calendar__form calendar-form" action="#">
+      <div class="calendar-form__item">
+        <div class="calendar__date calendar-date">
+          <span class="calendar-date__text">
+            Дата от
+          </span>
+          <input class="calendar-date__input" type="text" name="date-start" id="date-start" placeholder="ДД.ММ.ГГГГ">
+        </div>
+        <div class="calendar__item"></div>
       </div>
 
       <div class="calendar__date calendar-date">
         <span class="calendar-date__text">
           Дата до
         </span>
-        <input class="calendar-date__input" type="text" name="date-end" id="date-end">
+        <input class="calendar-date__input" type="text" name="date-end" id="date-end" placeholder="ДД.ММ.ГГГГ">
       </div>
 
     </form>
