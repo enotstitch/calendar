@@ -15,19 +15,34 @@
     <form class="calendar__form calendar-form" action="#">
       <div class="calendar-form__item">
         <div class="calendar__date calendar-date">
-          <span class="calendar-date__text">
-            Дата от
-          </span>
-          <input class="calendar-date__input" type="text" name="date-start" id="date-start" placeholder="ДД.ММ.ГГГГ">
+          <div class="calendar-date__inner">
+            <label for="date-start" class="calendar-date__label">
+              <span class="calendar-date__text">
+                Дата от
+              </span>
+              <input class="calendar-date__input" type="text" name="date-start" id="date-start"
+                placeholder="ДД.ММ.ГГГГ">
+            </label>
+            <button class="calendar-date__button-calendar btn-reset"></button>
+          </div>
         </div>
-        <div class="calendar__item"></div>
+        <div class="calendar__item calendar__item-first">
+        </div>
       </div>
 
-      <div class="calendar__date calendar-date">
-        <span class="calendar-date__text">
-          Дата до
-        </span>
-        <input class="calendar-date__input" type="text" name="date-end" id="date-end" placeholder="ДД.ММ.ГГГГ">
+      <div class="calendar-form__item">
+        <div class="calendar__date calendar-date">
+          <div class="calendar-date__inner">
+            <label for="date-end" class="calendar-date__label">
+              <span class="calendar-date__text">
+                Дата до
+              </span>
+              <input class="calendar-date__input" type="text" name="date-end" id="date-end" placeholder="ДД.ММ.ГГГГ">
+            </label>
+            <button class="calendar-date__button-calendar btn-reset"></button>
+          </div>
+        </div>
+        <div class="calendar__item calendar__item-second"></div>
       </div>
 
     </form>
