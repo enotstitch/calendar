@@ -119,6 +119,84 @@ input {
 	color: #bebebe;
 }
 
+.select {
+	position: relative;
+	margin: 0 auto;
+	user-select: none;
+}
+
+.select__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14.5px 18px;
+	background-color: #fff;
+	border: 0.5px solid #e3dcb2;
+	border-top: none; /* Нада ли тута бд топ ноне */
+}
+
+.select__button {
+	width: 6px;
+	height: 12px;
+	padding: 8.5px 11.5px;
+	background-image: url('../icons/arrow.svg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 11.5px 8.5px;
+}
+
+.select__button--prev {
+	transform: rotate(90deg);
+}
+
+.select__button--next {
+	transform: rotate(-90deg);
+}
+
+.select__current {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	gap: 13.5px;
+}
+
+.select-current__arrow {
+	transition: transform 0.2s;
+}
+
+.select__body {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 100%;
+	z-index: 5;
+	display: none;
+	overflow: hidden;
+	border-top: 0;
+	background-color: #fff;
+}
+
+.select__item {
+	padding: 14.5px 18px;
+	text-align: center;
+	border: 0.5px solid #e3dcb2;
+	transition: background-color 0.1s;
+	cursor: pointer;
+}
+
+.select__item:hover {
+	background-color: #eff0f0;
+}
+
+.select.is-active .select__body {
+	display: block;
+	width: 100%;
+}
+
+.select.is-active .select-current__arrow {
+	transform: rotate(-180deg);
+}
+
 table {
 	border-collapse: collapse;
 	background-color: #fff;

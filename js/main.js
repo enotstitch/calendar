@@ -1,3 +1,5 @@
+import select from './select.js';
+
 function createCalendar(elem, year, month) {
 	elem = document.querySelector(elem);
 
@@ -41,5 +43,7 @@ function getDay(date) {
 	return day - 1;
 }
 
-createCalendar('.calendar__item-first', 2023, 11);
-createCalendar('.calendar__item-second', 2023, 11);
+// createCalendar('.calendar__item-first', 2023, 11);
+// createCalendar('.calendar__item-second', 2023, 11);
+
+select();
