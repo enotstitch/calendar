@@ -117,6 +117,7 @@ input {
 
 .calendar-date__input::placeholder {
 	color: #bebebe;
+	font-weight: 400;
 }
 
 .select {
