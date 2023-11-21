@@ -43,7 +43,7 @@ function createCalendar(elem, year, month) {
   `;
 
 	for (let i = 0; i < getDay(d); i++) {
-		table += '<td></td>';
+		table += '<td class="emptyCell"></td>';
 	}
 
 	while (d.getMonth() == mon) {
@@ -56,6 +56,8 @@ function createCalendar(elem, year, month) {
 
 	table += '</tr></tbody></table>';
 	elem.innerHTML = table;
+
+	inputRender();
 }
 
 function getDay(date) {
@@ -94,6 +96,47 @@ function getMonth(event) {
 	}
 }
 
-select();
+let numNorm = (num) => {
+	if (num < 10) return `0${num}`;
+	return num;
+};
 
-// createCalendar('.calendar__item-second', 2022, 12);
+let detectCaseMonth = (num) => {
+	const nums = {
+		1: 'Января',
+		2: 'Февраля',
+		3: 'Марта',
+		4: 'Апреля',
+		5: 'Мая',
+		6: 'Июня',
+		7: 'Июля',
+		8: 'Августа',
+		9: 'Сентября',
+		10: 'Октября',
+		11: 'Ноября',
+		12: 'Декабря',
+	};
+
+	return nums[month];
+};
+
+let inputRender = () => {
+	const tableItems = document.querySelectorAll('td');
+
+	tableItems.forEach((item) => {
+		item.addEventListener('click', (event) => {
+			const target = event.target;
+			if (target.textContent) {
+				const calendarItem = target.closest('.calendar-form__item');
+				const calendarInput = calendarItem.querySelector(
+					'.calendar-date__input'
+				);
+				calendarInput.value = `${numNorm(target.textContent)} ${detectCaseMonth(
+					month
+				)} ${year}`;
+			}
+		});
+	});
+};
+
+select();

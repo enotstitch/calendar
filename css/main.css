@@ -210,6 +210,7 @@ th {
 	border: 0.5px solid #e3dcb2;
 	background-color: #fcf8df;
 	text-align: center;
+	user-select: none;
 }
 
 th {
@@ -219,4 +220,10 @@ th {
 
 td {
 	cursor: pointer;
+}
+
+.emptyCell {
+	border: none;
+	cursor: default;
+	background-color: #fffef4;
 }
