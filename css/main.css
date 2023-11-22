@@ -65,7 +65,7 @@ input {
 	gap: 5px;
 }
 
-.calendar-form__item {
+.calendar-form__selects {
 	display: flex;
 	flex-direction: column;
 	flex-shrink: 0;
