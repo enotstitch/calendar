@@ -13,96 +13,46 @@
 
   <div class="calendar">
     <form class="calendar__form calendar-form" action="#">
-      <div class="calendar-form__item">
-        <div class="calendar__date calendar-date">
-          <div class="calendar-date__inner">
-            <label for="date-start" class="calendar-date__label">
-              <span class="calendar-date__text">
-                Дата от
-              </span>
-              <input class="calendar-date__input" type="text" name="date-start" id="date-start"
-                placeholder="ДД.ММ.ГГГГ">
-            </label>
-            <button class="calendar-date__button-calendar btn-reset"></button>
+      <div class="calendar__wrap">
+        <div class="calendar-form__item">
+          <div class="calendar__date calendar-date calendar-date--start">
+            <div class="calendar-date__inner">
+              <label for="date-start" class="calendar-date__label">
+                <span class="calendar-date__text">
+                  Дата от
+                </span>
+                <input class="calendar-date__input calendar-date__input--day" type="text" name="date-day"
+                  id="date-start" placeholder="ДД.ММ.ГГГГ" maxlength="8">
+              </label>
+              <button class="calendar-date__button-calendar btn-reset"></button>
+            </div>
           </div>
+          <div class="calendar__selects calendar__selects-first"></div>
+          <div class="calendar__modal"></div>
         </div>
-        <div class="calendar__selects calendar__selects-first">
-          <div class="calendar__select select">
-            <div class="select__header">
-              <button class="select__button select__button--prev btn-reset"></button>
-              <div class="select__current select-current">
-                <span class="select-current__text">Выберите год</span>
-                <img class="select-current__arrow" src="./icons/arrow.svg" alt="Стрелочка">
-              </div>
-              <button class="select__button select__button--next btn-reset"></button>
-            </div>
-            <div class="select__body">
-              <div class="select__item select__item--year">2023</div>
-              <div class="select__item select__item--year">2022</div>
-              <div class="select__item select__item--year">2021</div>
-              <div class="select__item select__item--year">2020</div>
-              <div class="select__item select__item--year">2019</div>
-              <div class="select__item select__item--year">2018</div>
-              <div class="select__item select__item--year">2017</div>
-              <div class="select__item select__item--year">2016</div>
-              <div class="select__item select__item--year">2015</div>
-              <div class="select__item select__item--year">2014</div>
-              <div class="select__item select__item--year">2013</div>
-              <div class="select__item select__item--year">2012</div>
-              <div class="select__item select__item--year">2011</div>
-              <div class="select__item select__item--year">2010</div>
-              <div class="select__item select__item--year">2009</div>
-              <div class="select__item select__item--year">2008</div>
-              <div class="select__item select__item--year">2007</div>
-              <div class="select__item select__item--year">2006</div>
-              <div class="select__item select__item--year">2005</div>
-              <div class="select__item select__item--year">2004</div>
-            </div>
-          </div>
-          <div class="calendar__select select">
-            <div class="select__header">
-              <button class="select__button select__button--prev btn-reset"></button>
-              <div class="select__current select-current">
-                <span class="select-current__text">Выберите месяц</span>
-                <img class="select-current__arrow" src="./icons/arrow.svg" alt="Стрелочка">
-              </div>
-              <button class="select__button select__button--next btn-reset"></button>
-            </div>
-            <div class="select__body">
-              <div class="select__item select__item--month">Январь</div>
-              <div class="select__item select__item--month">Февраль</div>
-              <div class="select__item select__item--month">Март</div>
-              <div class="select__item select__item--month">Апрель</div>
-              <div class="select__item select__item--month">Май</div>
-              <div class="select__item select__item--month">Июнь</div>
-              <div class="select__item select__item--month">Июль</div>
-              <div class="select__item select__item--month">Август</div>
-              <div class="select__item select__item--month">Сентябрь</div>
-              <div class="select__item select__item--month">Октябрь</div>
-              <div class="select__item select__item--month">Ноябрь</div>
-              <div class="select__item select__item--month">Декабрь</div>
-            </div>
-          </div>
 
+        <div class="calendar-form__item">
+          <div class="calendar__date calendar-date calendar-date--end">
+            <div class="calendar-date__inner">
+              <label for="date-end" class="calendar-date__label">
+                <span class="calendar-date__text">
+                  Дата до
+                </span>
+                <input class="calendar-date__input" type="text" name="date-end" id="date-end" placeholder="ДД.ММ.ГГГГ">
+              </label>
+              <button class="calendar-date__button-calendar btn-reset"></button>
+            </div>
+          </div>
+          <div class="calendar__selects calendar__selects-second"></div>
+          <div class="calendar__modal"></div>
         </div>
-        <div class="calendar__modal"></div>
       </div>
 
-      <div class="calendar-form__item">
-        <div class="calendar__date calendar-date">
-          <div class="calendar-date__inner">
-            <label for="date-end" class="calendar-date__label">
-              <span class="calendar-date__text">
-                Дата до
-              </span>
-              <input class="calendar-date__input" type="text" name="date-end" id="date-end" placeholder="ДД.ММ.ГГГГ">
-            </label>
-            <button class="calendar-date__button-calendar btn-reset"></button>
-          </div>
-        </div>
-        <div class="calendar__item calendar__item-second"></div>
-      </div>
 
+      <div class="calendar__control">
+        <button class="calendar__reset btn-reset">Сбросить</button>
+        <button class="calendar__apply btn-reset">Применить</button>
+      </div>
     </form>
   </div>
 
