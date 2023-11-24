@@ -87,6 +87,19 @@ function removeBackground(calendarItem) {
 	}
 }
 
+function resetDateInput(calendarItem) {
+	const currentCalendarInput = calendarItem.querySelector(
+		'.calendar-date__input'
+	);
+	const resetButton = calendarItem.querySelector(
+		'.calendar-date__button-reset'
+	);
+
+	currentCalendarInput.value = '';
+	calendarItem.classList.remove('calendar-date--white-bg');
+	resetButton.remove();
+}
+
 window.addEventListener('DOMContentLoaded', () => {
 	const dateEndInput = calendarDateEnd.querySelector('.calendar-date__input');
 	const monthName = detectCaseMonth(nowMonth);
@@ -124,7 +137,7 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
 	let select = `
   <div class="calendar__select select">
     <div class="select__header">
-      <button class="select__button select__button--prev btn-reset"></button>
+      <button class="select__button select__button--prev btn-reset" type="button"></button>
       <div class="select__current select-current">
         <span class="select-current__text">${selectName}</span>
         <img class="select-current__arrow" src="./icons/arrow.svg" alt="Стрелочка">
@@ -182,11 +195,20 @@ function getDay(date) {
 }
 
 calendarDateStart.addEventListener('click', (event) => {
-	removeBackground(calendarDateStart);
-	calendarDateStart.classList.add('calendar-date--white-bg');
-
+	const isResetBtnClick = event.target.classList.contains(
+		'calendar-date__button-reset'
+	);
 	let currentCalendar = event.target.closest('.calendar-form__item');
 	let wrapCurrentSelects = currentCalendar.querySelector('.calendar__selects');
+
+	calendarDateStart.classList.add('calendar-date--white-bg');
+	removeBackground(calendarDateStart);
+
+	if (isResetBtnClick) {
+		resetDateInput(calendarDateStart);
+		return;
+	}
+
 	wrapCurrentSelects.innerHTML = '';
 
 	renderSelects('Выберите год', 'select__body--start-year', wrapFirstSelects);
@@ -201,11 +223,20 @@ calendarDateStart.addEventListener('click', (event) => {
 });
 
 calendarDateEnd.addEventListener('click', (event) => {
-	removeBackground(calendarDateEnd);
-	calendarDateEnd.classList.add('calendar-date--white-bg');
-
+	const isResetBtnClick = event.target.classList.contains(
+		'calendar-date__button-reset'
+	);
 	let currentCalendar = event.target.closest('.calendar-form__item');
 	let wrapCurrentSelects = currentCalendar.querySelector('.calendar__selects');
+
+	calendarDateEnd.classList.add('calendar-date--white-bg');
+	removeBackground(calendarDateEnd);
+
+	if (isResetBtnClick) {
+		resetDateInput(calendarDateEnd);
+		return;
+	}
+
 	wrapCurrentSelects.innerHTML = '';
 
 	renderSelects('Выберите год', 'select__body--end-year', wrapSecondSelects);
