@@ -11,53 +11,53 @@ const nowMonth = now.getMonth() + 1;
 const nowYear = now.getFullYear();
 
 const months = {
-	Январь: 1,
-	Февраль: 2,
-	Март: 3,
-	Апрель: 4,
-	Май: 5,
-	Июнь: 6,
-	Июль: 7,
-	Август: 8,
-	Сентябрь: 9,
-	Октябрь: 10,
-	Ноябрь: 11,
-	Декабрь: 12,
+  Январь: 1,
+  Февраль: 2,
+  Март: 3,
+  Апрель: 4,
+  Май: 5,
+  Июнь: 6,
+  Июль: 7,
+  Август: 8,
+  Сентябрь: 9,
+  Октябрь: 10,
+  Ноябрь: 11,
+  Декабрь: 12,
 };
 
 const numsMonth = {
-	1: 'Января',
-	2: 'Февраля',
-	3: 'Марта',
-	4: 'Апреля',
-	5: 'Мая',
-	6: 'Июня',
-	7: 'Июля',
-	8: 'Августа',
-	9: 'Сентября',
-	10: 'Октября',
-	11: 'Ноября',
-	12: 'Декабря',
+  1: 'Января',
+  2: 'Февраля',
+  3: 'Марта',
+  4: 'Апреля',
+  5: 'Мая',
+  6: 'Июня',
+  7: 'Июля',
+  8: 'Августа',
+  9: 'Сентября',
+  10: 'Октября',
+  11: 'Ноября',
+  12: 'Декабря',
 };
 
 const detectMonth = (month) => {
-	return months[month];
+  return months[month];
 };
 
 let detectCaseMonth = (num) => {
-	return numsMonth[num];
+  return numsMonth[num];
 };
 
 function addStyleFullDate(calendarItem) {
-	const currentCalendarInner = calendarItem.querySelector(
-		'.calendar-date__inner'
-	);
-	calendarItem.classList.add('calendar-date--white-bg');
-	currentCalendarInner.classList.add('calendar-date__inner--peach-bg');
+  const currentCalendarInner = calendarItem.querySelector(
+    '.calendar-date__inner'
+  );
+  calendarItem.classList.add('calendar-date--white-bg');
+  currentCalendarInner.classList.add('calendar-date__inner--peach-bg');
 
-	const resetButton = document.createElement('button');
-	resetButton.className = 'calendar-date__button-reset btn-reset';
-	calendarItem.append(resetButton);
+  const resetButton = document.createElement('button');
+  resetButton.className = 'calendar-date__button-reset btn-reset';
+  calendarItem.append(resetButton);
 }
 
 // function removeStyleFullDate(calendarItem) {
@@ -74,54 +74,54 @@ function addStyleFullDate(calendarItem) {
 // }
 
 function removeBackground(calendarItem) {
-	const currentCalendarInner = calendarItem.querySelector(
-		'.calendar-date__inner'
-	);
-	const resetButton = calendarItem.querySelector(
-		'.calendar-date__button-reset'
-	);
+  const currentCalendarInner = calendarItem.querySelector(
+    '.calendar-date__inner'
+  );
+  const resetButton = calendarItem.querySelector(
+    '.calendar-date__button-reset'
+  );
 
-	currentCalendarInner.classList.remove('calendar-date__inner--peach-bg');
-	if (resetButton) {
-		resetButton.classList.add('calendar-date__button-reset--transparent-bg');
-	}
+  currentCalendarInner.classList.remove('calendar-date__inner--peach-bg');
+  if (resetButton) {
+    resetButton.classList.add('calendar-date__button-reset--transparent-bg');
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-	const dateEndInput = calendarDateEnd.querySelector('.calendar-date__input');
-	const monthName = detectCaseMonth(nowMonth);
+  const dateEndInput = calendarDateEnd.querySelector('.calendar-date__input');
+  const monthName = detectCaseMonth(nowMonth);
 
-	dateEndInput.value = `${nowDay} ${monthName} ${nowYear}`;
+  dateEndInput.value = `${nowDay} ${monthName} ${nowYear}`;
 
-	addStyleFullDate(calendarDateEnd);
+  addStyleFullDate(calendarDateEnd);
 });
 
 function createSelectYears(selectBodyElem) {
-	selectBodyElem = document.querySelector(selectBodyElem);
+  selectBodyElem = document.querySelector(selectBodyElem);
 
-	let minYear = nowYear - 20;
+  let minYear = nowYear - 20;
 
-	for (let year = nowYear; year >= minYear; year--) {
-		const selectItem = document.createElement('div');
-		selectItem.className = 'select__item';
-		selectItem.textContent = `${year}`;
-		selectBodyElem.append(selectItem);
-	}
+  for (let year = nowYear; year >= minYear; year--) {
+    const selectItem = document.createElement('div');
+    selectItem.className = 'select__item';
+    selectItem.textContent = `${year}`;
+    selectBodyElem.append(selectItem);
+  }
 }
 
 function createSelectMonth(selectBodyElem) {
-	selectBodyElem = document.querySelector(selectBodyElem);
+  selectBodyElem = document.querySelector(selectBodyElem);
 
-	for (const month in months) {
-		const selectItem = document.createElement('div');
-		selectItem.className = 'select__item';
-		selectItem.textContent = `${month}`;
-		selectBodyElem.append(selectItem);
-	}
+  for (const month in months) {
+    const selectItem = document.createElement('div');
+    selectItem.className = 'select__item';
+    selectItem.textContent = `${month}`;
+    selectBodyElem.append(selectItem);
+  }
 }
 
 function renderSelects(selectName, selectExtraClass, selectsWrap) {
-	let select = `
+  let select = `
   <div class="calendar__select select">
     <div class="select__header">
       <button class="select__button select__button--prev btn-reset"></button>
@@ -135,16 +135,16 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
   </div>
 	`;
 
-	selectsWrap.innerHTML += select;
+  selectsWrap.innerHTML += select;
 }
 
 function createCalendar(elem, year, month) {
-	elem = document.querySelector(elem);
+  elem = document.querySelector(elem);
 
-	let mon = month - 1;
-	let d = new Date(year, mon);
+  let mon = month - 1;
+  let d = new Date(year, mon);
 
-	let table = `
+  let table = `
     <table>
     <tbody>
       <tr>
@@ -159,60 +159,60 @@ function createCalendar(elem, year, month) {
       <tr>
   `;
 
-	for (let i = 0; i < getDay(d); i++) {
-		table += '<td class="empty-cell"></td>';
-	}
+  for (let i = 0; i < getDay(d); i++) {
+    table += '<td class="empty-cell"></td>';
+  }
 
-	while (d.getMonth() == mon) {
-		table += '<td>' + d.getDate() + '</td>';
-		if (getDay(d) % 7 == 6) {
-			table += '</tr><tr>';
-		}
-		d.setDate(d.getDate() + 1);
-	}
+  while (d.getMonth() == mon) {
+    table += '<td>' + d.getDate() + '</td>';
+    if (getDay(d) % 7 == 6) {
+      table += '</tr><tr>';
+    }
+    d.setDate(d.getDate() + 1);
+  }
 
-	table += '</tr></tbody></table>';
-	elem.innerHTML = table;
+  table += '</tr></tbody></table>';
+  elem.innerHTML = table;
 }
 
 function getDay(date) {
-	let day = date.getDay();
-	if (day == 0) day = 7;
-	return day - 1;
+  let day = date.getDay();
+  if (day == 0) day = 7;
+  return day - 1;
 }
 
 calendarDateStart.addEventListener('click', (event) => {
-	removeBackground(calendarDateStart);
-	calendarDateStart.classList.add('calendar-date--white-bg');
+  removeBackground(calendarDateStart);
+  calendarDateStart.classList.add('calendar-date--white-bg');
 
-	let currentCalendar = event.target.closest('.calendar-form__item');
-	let wrapCurrentSelects = currentCalendar.querySelector('.calendar__selects');
-	wrapCurrentSelects.innerHTML = '';
+  let currentCalendar = event.target.closest('.calendar-form__item');
+  let wrapCurrentSelects = currentCalendar.querySelector('.calendar__selects');
+  wrapCurrentSelects.innerHTML = '';
 
-	renderSelects('Выберите год', 'select__body--start-year', wrapFirstSelects);
-	renderSelects(
-		'Выберите месяц',
-		'select__body--start-month',
-		wrapFirstSelects
-	);
-	createSelectYears('.select__body--start-year');
-	createSelectMonth('.select__body--start-month');
-	select();
+  renderSelects('Выберите год', 'select__body--start-year', wrapFirstSelects);
+  renderSelects(
+    'Выберите месяц',
+    'select__body--start-month',
+    wrapFirstSelects
+  );
+  createSelectYears('.select__body--start-year');
+  createSelectMonth('.select__body--start-month');
+  select();
 });
 
 calendarDateEnd.addEventListener('click', (event) => {
-	removeBackground(calendarDateEnd);
-	calendarDateEnd.classList.add('calendar-date--white-bg');
+  removeBackground(calendarDateEnd);
+  calendarDateEnd.classList.add('calendar-date--white-bg');
 
-	let currentCalendar = event.target.closest('.calendar-form__item');
-	let wrapCurrentSelects = currentCalendar.querySelector('.calendar__selects');
-	wrapCurrentSelects.innerHTML = '';
+  let currentCalendar = event.target.closest('.calendar-form__item');
+  let wrapCurrentSelects = currentCalendar.querySelector('.calendar__selects');
+  wrapCurrentSelects.innerHTML = '';
 
-	renderSelects('Выберите год', 'select__body--end-year', wrapSecondSelects);
-	renderSelects('Выберите месяц', 'select__body--end-month', wrapSecondSelects);
-	createSelectYears('.select__body--end-year');
-	createSelectMonth('.select__body--end-month');
-	select();
+  renderSelects('Выберите год', 'select__body--end-year', wrapSecondSelects);
+  renderSelects('Выберите месяц', 'select__body--end-month', wrapSecondSelects);
+  createSelectYears('.select__body--end-year');
+  createSelectMonth('.select__body--end-month');
+  select();
 });
 
 // createCalendar('.calendar__item-first', 2023, 11);
@@ -276,50 +276,79 @@ calendarDateEnd.addEventListener('click', (event) => {
 //   });
 // };
 
-// window.addEventListener('DOMContentLoaded', function () {
-//   [].forEach.call(
-//     document.querySelectorAll('.calendar-date__input--day'),
-//     function (input) {
-//       var keyCode;
-//       function mask(event) {
-//         event.keyCode && (keyCode = event.keyCode);
-//         var pos = this.selectionStart;
-//         if (pos < 3) event.preventDefault();
-//         var matrix = '+7 (___) ___ ____',
-//           i = 0,
-//           def = matrix.replace(/\D/g, ''),
-//           val = this.value.replace(/\D/g, ''),
-//           new_value = matrix.replace(/[_\d]/g, function (a) {
-//             return i < val.length ? val.charAt(i++) : a;
-//           });
-//         i = new_value.indexOf('_');
-//         if (i != -1) {
-//           i < 5 && (i = 3);
-//           new_value = new_value.slice(0, i);
-//         }
-//         var reg = matrix
-//           .substr(0, this.value.length)
-//           .replace(/_+/g, function (a) {
-//             return '\\d{1,' + a.length + '}';
-//           })
-//           .replace(/[+()]/g, '\\$&');
-//         reg = new RegExp('^' + reg + '$');
-//         if (
-//           !reg.test(this.value) ||
-//           this.value.length < 5 ||
-//           (keyCode > 47 && keyCode < 58)
-//         ) {
-//           this.value = new_value;
-//         }
-//         if (event.type == 'blur' && this.value.length < 5) {
-//           this.value = '';
-//         }
-//       }
+// document.addEventListener("DOMContentLoaded", function () {
+//     var phoneInputs = document.querySelectorAll('input[data-tel-input]');
 
-//       input.addEventListener('input', mask, false);
-//       input.addEventListener('focus', mask, false);
-//       input.addEventListener('blur', mask, false);
-//       input.addEventListener('keydown', mask, false);
+//     var getInputNumbersValue = function (input) {
+//         // Return stripped input value — just numbers
+//         return input.value.replace(/\D/g, '');
 //     }
-//   );
-// });
+
+//     var onPhonePaste = function (e) {
+//         var input = e.target,
+//             inputNumbersValue = getInputNumbersValue(input);
+//         var pasted = e.clipboardData || window.clipboardData;
+//         if (pasted) {
+//             var pastedText = pasted.getData('Text');
+//             if (/\D/g.test(pastedText)) {
+//                 // Attempt to paste non-numeric symbol — remove all non-numeric symbols,
+//                 // formatting will be in onPhoneInput handler
+//                 input.value = inputNumbersValue;
+//                 return;
+//             }
+//         }
+//     }
+
+//     var onPhoneInput = function (e) {
+//         var input = e.target,
+//             inputNumbersValue = getInputNumbersValue(input),
+//             selectionStart = input.selectionStart,
+//             formattedInputValue = "";
+
+//         if (!inputNumbersValue) {
+//             return input.value = "";
+//         }
+
+//         if (input.value.length != selectionStart) {
+//             // Editing in the middle of input, not last symbol
+//             if (e.data && /\D/g.test(e.data)) {
+//                 // Attempt to input non-numeric symbol
+//                 input.value = inputNumbersValue;
+//             }
+//             return;
+//         }
+
+//         if (["7", "8", "9"].indexOf(inputNumbersValue[0]) > -1) {
+//             if (inputNumbersValue[0] == "9") inputNumbersValue = "7" + inputNumbersValue;
+//             var firstSymbols = (inputNumbersValue[0] == "8") ? "8" : "+7";
+//             formattedInputValue = input.value = firstSymbols + " ";
+//             if (inputNumbersValue.length > 1) {
+//                 formattedInputValue += '(' + inputNumbersValue.substring(1, 4);
+//             }
+//             if (inputNumbersValue.length >= 5) {
+//                 formattedInputValue += ') ' + inputNumbersValue.substring(4, 7);
+//             }
+//             if (inputNumbersValue.length >= 8) {
+//                 formattedInputValue += '-' + inputNumbersValue.substring(7, 9);
+//             }
+//             if (inputNumbersValue.length >= 10) {
+//                 formattedInputValue += '-' + inputNumbersValue.substring(9, 11);
+//             }
+//         } else {
+//             formattedInputValue = '+' + inputNumbersValue.substring(0, 16);
+//         }
+//         input.value = formattedInputValue;
+//     }
+//     var onPhoneKeyDown = function (e) {
+//         // Clear input after remove last symbol
+//         var inputValue = e.target.value.replace(/\D/g, '');
+//         if (e.keyCode == 8 && inputValue.length == 1) {
+//             e.target.value = "";
+//         }
+//     }
+//     for (var phoneInput of phoneInputs) {
+//         phoneInput.addEventListener('keydown', onPhoneKeyDown);
+//         phoneInput.addEventListener('input', onPhoneInput, false);
+//         phoneInput.addEventListener('paste', onPhonePaste, false);
+//     }
+// })
