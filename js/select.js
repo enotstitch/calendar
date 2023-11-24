@@ -31,6 +31,12 @@ let select = function () {
 			currentText = select.querySelector('.select-current__text');
 		currentText.innerText = text;
 		select.classList.remove('is-active');
+
+		const selectWrap = select.closest('.calendar__selects');
+		try {
+			const disabledSelect = selectWrap.querySelector('.disabled');
+			disabledSelect.classList.remove('disabled');
+		} catch {}
 	}
 };
 
