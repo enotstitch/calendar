@@ -21,14 +21,14 @@
                 <span class="calendar-date__text">
                   Дата от
                 </span>
-                <input class="calendar-date__input calendar-date__input--day" type="tel" name="date-day" id="date-start"
-                  placeholder="ДД.ММ.ГГГГ" maxlength="8">
+                <input class="calendar-date__input" type="tel" name="date-day" id="date-start" placeholder="ДД.ММ.ГГГГ"
+                  maxlength="8">
               </label>
               <button class="calendar-date__button-calendar btn-reset" type="button"></button>
             </div>
           </div>
           <div class="calendar__selects"></div>
-          <div class="calendar__modal"></div>
+          <div class="calendar__modal calendar__modal--first"></div>
         </div>
 
         <div class="calendar-form__item">
@@ -38,21 +38,21 @@
                 <span class="calendar-date__text">
                   Дата до
                 </span>
-                <input class="calendar-date__input" type="tel" name="date-end" id="date-end" placeholder="ДД.ММ.ГГГГ">
+                <input class="calendar-date__input" data-date-end type="tel" name="date-end" id="date-end" placeholder="ДД.ММ.ГГГГ">
               </label>
               <button class="calendar-date__button-calendar btn-reset" type="button"></button>
             </div>
           </div>
           <div class="calendar__selects"></div>
-          <div class="calendar__modal"></div>
+          <div class="calendar__modal calendar__modal--second"></div>
         </div>
       </div>
 
 
-      <div class="calendar__control">
+      <!-- <div class="calendar__control">
         <button class="calendar__reset btn-reset">Сбросить</button>
         <button class="calendar__apply btn-reset">Применить</button>
-      </div>
+      </div> -->
     </form>
   </div>
 
