@@ -1,9 +1,7 @@
 import select from './select.js';
 
-const calendarDateStart = document.querySelector('.calendar-date--start');
+const calendars = document.querySelectorAll('.calendar-date');
 const calendarDateEnd = document.querySelector('.calendar-date--end');
-const wrapFirstSelects = document.querySelector('.calendar__selects-first');
-const wrapSecondSelects = document.querySelector('.calendar__selects-second');
 
 const now = new Date();
 const nowDay = now.getDate();
@@ -134,6 +132,8 @@ function createSelectMonth(selectBodyElem) {
 }
 
 function renderSelects(selectName, selectExtraClass, selectsWrap) {
+  const selectsWraps = document.querySelectorAll(selectsWrap);
+
   let select = `
   <div class="calendar__select select">
     <div class="select__header">
@@ -148,7 +148,9 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
   </div>
 	`;
 
-  selectsWrap.innerHTML += select;
+  selectsWraps.forEach((selectsWrap) => {
+    selectsWrap.innerHTML += select;
+  });
 }
 
 function createCalendar(elem, year, month) {
@@ -194,57 +196,66 @@ function getDay(date) {
   return day - 1;
 }
 
-calendarDateStart.addEventListener('click', (event) => {
-  const isResetBtnClick = event.target.classList.contains(
-    'calendar-date__button-reset'
-  );
-  let currentCalendar = event.target.closest('.calendar-form__item');
-  let wrapCurrentSelects = currentCalendar.querySelector('.calendar__selects');
+calendars.forEach((calendar) => {
+  calendar.addEventListener('click', (event) => {
+    const isResetBtnClick = event.target.classList.contains(
+      'calendar-date__button-reset'
+    );
 
-  calendarDateStart.classList.add('calendar-date--white-bg');
-  removeBackground(calendarDateStart);
+    let calendarWrap = event.target.closest('.calendar__wrap');
+    let wrapsSelects = calendarWrap.querySelectorAll('.calendar__selects');
 
-  if (isResetBtnClick) {
-    resetDateInput(calendarDateStart);
-    return;
-  }
+    calendar.classList.add('calendar-date--white-bg');
+    removeBackground(calendar);
 
-  wrapCurrentSelects.innerHTML = '';
+    if (isResetBtnClick) {
+      resetDateInput(calendar);
+      return;
+    }
 
-  renderSelects('Выберите год', 'select__body--start-year', wrapFirstSelects);
-  renderSelects(
-    'Выберите месяц',
-    'select__body--start-month',
-    wrapFirstSelects
-  );
-  createSelectYears('.select__body--start-year');
-  createSelectMonth('.select__body--start-month');
-  select();
+    wrapsSelects.forEach((wrapSelects) => {
+      wrapSelects.innerHTML = '';
+    });
+
+    renderSelects('Выберите год', 'select__body--year', '.calendar__selects');
+    // renderSelects(
+    //   'Выберите месяц',
+    //   'select__body--start-month',
+    //   wrapFirstSelects
+    // );
+    // createSelectYears('.select__body--start-year');
+    // createSelectMonth('.select__body--start-month');
+    // select();
+    // createCalendar('.calendar__modal--first', 2023, 11);
+    // createCalendar('.calendar__modal--second', 2023, 11);
+  });
 });
 
-calendarDateEnd.addEventListener('click', (event) => {
-  const isResetBtnClick = event.target.classList.contains(
-    'calendar-date__button-reset'
-  );
-  let currentCalendar = event.target.closest('.calendar-form__item');
-  let wrapCurrentSelects = currentCalendar.querySelector('.calendar__selects');
+// calendarDateEnd.addEventListener('click', (event) => {
+//   const isResetBtnClick = event.target.classList.contains(
+//     'calendar-date__button-reset'
+//   );
+//   let currentCalendar = event.target.closest('.calendar-form__item');
+//   let wrapCurrentSelects = currentCalendar.querySelector('.calendar__selects');
 
-  calendarDateEnd.classList.add('calendar-date--white-bg');
-  removeBackground(calendarDateEnd);
+//   calendarDateEnd.classList.add('calendar-date--white-bg');
+//   removeBackground(calendarDateEnd);
 
-  if (isResetBtnClick) {
-    resetDateInput(calendarDateEnd);
-    return;
-  }
+//   if (isResetBtnClick) {
+//     resetDateInput(calendarDateEnd);
+//     return;
+//   }
 
-  wrapCurrentSelects.innerHTML = '';
+//   wrapCurrentSelects.innerHTML = '';
 
-  renderSelects('Выберите год', 'select__body--end-year', wrapSecondSelects);
-  renderSelects('Выберите месяц', 'select__body--end-month', wrapSecondSelects);
-  createSelectYears('.select__body--end-year');
-  createSelectMonth('.select__body--end-month');
-  select();
-});
+//   renderSelects('Выберите год', 'select__body--end-year', wrapSecondSelects);
+//   renderSelects('Выберите месяц', 'select__body--end-month', wrapSecondSelects);
+//   createSelectYears('.select__body--end-year');
+//   createSelectMonth('.select__body--end-month');
+//   select();
+//   createCalendar('.calendar__modal--first', 2023, 11);
+//   createCalendar('.calendar__modal--second', 2023, 11);
+// });
 
 // createCalendar('.calendar__item-first', 2023, 11);
 // createCalendar('.calendar__item-second', 2023, 11);
