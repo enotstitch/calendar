@@ -56,18 +56,18 @@ const numsMonth = {
 };
 
 const nameMonth = {
-	Января: 1,
-	Февраля: 2,
-	Марта: 3,
-	Апреля: 4,
-	Мая: 5,
-	Июня: 6,
-	Июля: 7,
-	Августа: 8,
-	Сентября: 9,
-	Октября: 10,
-	Ноября: 11,
-	Декабря: 12,
+  Января: 1,
+  Февраля: 2,
+  Марта: 3,
+  Апреля: 4,
+  Мая: 5,
+  Июня: 6,
+  Июля: 7,
+  Августа: 8,
+  Сентября: 9,
+  Октября: 10,
+  Ноября: 11,
+  Декабря: 12,
 };
 
 const detectMonth = (month) => {
@@ -79,27 +79,27 @@ let detectCaseMonth = (num) => {
 };
 
 let detectNameMonth = (num) => {
-	return nameMonth[num];
+  return nameMonth[num];
 };
 
 function addStyleFullDate(calendarInput) {
-	const currentCalendarInner = calendarInput.closest('.calendar-date__inner');
-	const currentCalendar = calendarInput.closest('.calendar-date');
-	const calendarDate = currentCalendarInner.closest('.calendar-date')
-	currentCalendarInner.classList.add('calendar-date__inner--peach-bg');
-	currentCalendar.classList.add('calendar-date--white-bg');
-	const resetButton = calendarDate.querySelector(
-		'.calendar-date__button-reset'
-	);
+  const currentCalendarInner = calendarInput.closest('.calendar-date__inner');
+  const currentCalendar = calendarInput.closest('.calendar-date');
+  const calendarDate = currentCalendarInner.closest('.calendar-date');
+  currentCalendarInner.classList.add('calendar-date__inner--peach-bg');
+  currentCalendar.classList.add('calendar-date--white-bg');
+  const resetButton = calendarDate.querySelector(
+    '.calendar-date__button-reset'
+  );
 
-	if (!resetButton) {
-		console.log(1);
-		const resetButton = document.createElement('button');
-		resetButton.className = 'calendar-date__button-reset btn-reset';
-		currentCalendar.append(resetButton);
-	} else {
-		return;
-	}
+  if (!resetButton) {
+    const resetButton = document.createElement('button');
+    resetButton.className = 'calendar-date__button-reset btn-reset';
+    resetButton.setAttribute('data-title', 'Очистить поле?');
+    currentCalendar.append(resetButton);
+  } else {
+    return;
+  }
 }
 
 function removeStyleFullDate(calendarItem) {
@@ -145,53 +145,53 @@ function resetDateInput(calendarItem) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-	const dateEndInput = document.querySelector('[data-date-end]');
-	const monthName = detectCaseMonth(nowMonth);
+  const dateEndInput = document.querySelector('[data-date-end]');
+  const monthName = detectCaseMonth(nowMonth);
 
-	dateEndInput.value = `${nowDay} ${monthName} ${nowYear}`;
+  dateEndInput.value = `${nowDay} ${monthName} ${nowYear}`;
 
-	addStyleFullDate(dateEndInput);
+  addStyleFullDate(dateEndInput);
 
-	calendarItems.forEach((calendarItem) => {
-		calendarItem.addEventListener('click', (event) => {
-			const currentValues = calendarItem.querySelectorAll(
-				'.select-current__text'
-			);
-			currentValues.forEach((currentValue) => {
-				const currentValueText = currentValue.textContent;
-				if (
-					currentValue.classList.contains('select-current__text--year') &&
-					currentValueText !== SELECT_NAME.YEAR
-				) {
-					if (currentValue.closest('.calendar-form__item--first')) {
-						startDate.year = currentValueText;
-						renderCalendars();
-					} else if (currentValue.closest('.calendar-form__item--second')) {
-						endDate.year = currentValueText;
-						renderCalendars();
-					}
-				}
-				if (
-					currentValue.classList.contains('select-current__text--month') &&
-					currentValueText !== SELECT_NAME.MONTH
-				) {
-					if (currentValue.closest('.calendar-form__item--first')) {
-						startDate.month = detectMonth(currentValueText);
-						renderCalendars();
-					} else if (currentValue.closest('.calendar-form__item--second')) {
-						endDate.month = detectMonth(currentValueText);
-						renderCalendars();
-					}
-				}
-			});
-			if (
-				!event.target.classList.contains('calendar-date__button-reset') &&
-				!event.target.closest('table')
-			) {
-				renderCalendars();
-			}
-		});
-	});
+  calendarItems.forEach((calendarItem) => {
+    calendarItem.addEventListener('click', (event) => {
+      const currentValues = calendarItem.querySelectorAll(
+        '.select-current__text'
+      );
+      currentValues.forEach((currentValue) => {
+        const currentValueText = currentValue.textContent;
+        if (
+          currentValue.classList.contains('select-current__text--year') &&
+          currentValueText !== SELECT_NAME.YEAR
+        ) {
+          if (currentValue.closest('.calendar-form__item--first')) {
+            startDate.year = currentValueText;
+            renderCalendars();
+          } else if (currentValue.closest('.calendar-form__item--second')) {
+            endDate.year = currentValueText;
+            renderCalendars();
+          }
+        }
+        if (
+          currentValue.classList.contains('select-current__text--month') &&
+          currentValueText !== SELECT_NAME.MONTH
+        ) {
+          if (currentValue.closest('.calendar-form__item--first')) {
+            startDate.month = detectMonth(currentValueText);
+            renderCalendars();
+          } else if (currentValue.closest('.calendar-form__item--second')) {
+            endDate.month = detectMonth(currentValueText);
+            renderCalendars();
+          }
+        }
+      });
+      if (
+        !event.target.classList.contains('calendar-date__button-reset') &&
+        !event.target.closest('table')
+      ) {
+        renderCalendars();
+      }
+    });
+  });
 });
 
 function createSelectYears(selectBody) {
@@ -265,51 +265,49 @@ function resetForm(event) {
 }
 
 function acceptForm() {
-	const inputs = document.querySelectorAll('[data-date-input]');
-	inputs.forEach((input) => {
-		const inputValue = input.value;
-		const calendarItem = input.closest('.calendar-form__item');
+  const inputs = document.querySelectorAll('[data-date-input]');
+  inputs.forEach((input) => {
+    const inputValue = input.value;
+    const calendarItem = input.closest('.calendar-form__item');
 
-		if (!inputValue.includes('.') || !inputValue) return;
-		const isStartDateInput = calendarItem.classList.contains(
-			'calendar-form__item--first'
-		);
-		const isEndDateInput = calendarItem.classList.contains(
-			'calendar-form__item--second'
-		);
+    if (!inputValue.includes('.') || !inputValue) return;
+    const isStartDateInput = calendarItem.classList.contains(
+      'calendar-form__item--first'
+    );
+    const isEndDateInput = calendarItem.classList.contains(
+      'calendar-form__item--second'
+    );
 
-		addStyleFullDate(input);
+    addStyleFullDate(input);
 
-		const inputDateArr = inputValue.split('.');
-		let currentDay = +inputDateArr[0];
-		let currentMonth = +inputDateArr[1];
-		let currentYear = +inputDateArr[2];
+    const inputDateArr = inputValue.split('.');
+    let currentDay = +inputDateArr[0];
+    let currentMonth = +inputDateArr[1];
+    let currentYear = +inputDateArr[2];
 
-		if (isStartDateInput) {
-			startDate = {
-				day: currentDay,
-				month: currentMonth,
-				year: currentYear,
-			};
-		}
+    if (isStartDateInput) {
+      startDate = {
+        day: currentDay,
+        month: currentMonth,
+        year: currentYear,
+      };
+    }
 
-		if (isEndDateInput) {
-			endDate = {
-				day: currentDay,
-				month: currentMonth,
-				year: currentYear,
-			};
-		}
+    if (isEndDateInput) {
+      endDate = {
+        day: currentDay,
+        month: currentMonth,
+        year: currentYear,
+      };
+    }
 
-		currentMonth = detectCaseMonth(currentMonth);
+    currentMonth = detectCaseMonth(currentMonth);
 
-		let formattedInputValue = `${currentDay} ${currentMonth} ${currentYear}`;
+    let formattedInputValue = `${currentDay} ${currentMonth} ${currentYear}`;
 
-		input.value = formattedInputValue;
-		disableControlBlock();
-	});
-
-	renderCalendars();
+    input.value = formattedInputValue;
+    disableControlBlock();
+  });
 }
 
 function renderControlBlock() {
@@ -389,19 +387,19 @@ calendars.forEach((calendar) => {
       'calendar-date__button-reset'
     );
 
-		let calendarWrap = event.target.closest('.calendar__wrap');
-		let wrapsSelects = calendarWrap.querySelectorAll('.calendar__selects');
-		const input = calendar.querySelector('.calendar-date__input');
+    let calendarWrap = event.target.closest('.calendar__wrap');
+    let wrapsSelects = calendarWrap.querySelectorAll('.calendar__selects');
+    const input = calendar.querySelector('.calendar-date__input');
 
-		if (input.value && input.value.includes(' ')) {
-			const currentDateArr = input.value.split(' ');
-			let currentDay = currentDateArr[0];
-			let currentMonth = currentDateArr[1];
-			let currentYear = currentDateArr[2];
-			currentMonth = detectNameMonth(currentMonth);
+    if (input.value && input.value.includes(' ')) {
+      const currentDateArr = input.value.split(' ');
+      let currentDay = currentDateArr[0];
+      let currentMonth = currentDateArr[1];
+      let currentYear = currentDateArr[2];
+      currentMonth = detectNameMonth(currentMonth);
 
-			input.value = `${currentDay}.${currentMonth}.${currentYear}`;
-		}
+      input.value = `${currentDay}.${currentMonth}.${currentYear}`;
+    }
 
     calendar.classList.add('calendar-date--white-bg');
     removeBackground(calendar);
@@ -444,13 +442,13 @@ function renderSecondCalendar() {
 }
 
 function renderCalendars() {
-	renderFirstCalendar();
-	renderSecondCalendar();
+  renderFirstCalendar();
+  renderSecondCalendar();
 
-	const tables = document.querySelectorAll('table');
-	tables.forEach((table) => {
-		table.addEventListener('click', tableClick);
-	});
+  const tables = document.querySelectorAll('table');
+  tables.forEach((table) => {
+    table.addEventListener('click', tableClick);
+  });
 }
 
 let numNormalize = (num) => {

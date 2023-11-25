@@ -125,12 +125,53 @@ input {
 }
 
 .calendar-date__button-reset {
+  position: relative;
   padding: 17px;
   background-color: #fcf8df;
   background-image: url('../icons/cross.svg');
   background-repeat: no-repeat;
   background-size: 14px;
   background-position: center;
+  transition: all 0.1s;
+}
+
+.calendar-date__button-reset::before,
+.calendar-date__button-reset::after {
+  transition: all 0.1s;
+}
+
+.calendar-date__button-reset:hover {
+  background-color: #fede31;
+  background-image: url('../icons/cross-red.svg');
+}
+
+.calendar-date__button-reset:hover:before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  left: 45%;
+  top: 55px;
+  width: 20px;
+  height: 20px;
+  background-color: #fcf8df;
+  border: 1px solid #fede31;
+  transform: rotate(45deg) translateX(-50%);
+  border-right: none;
+  border-bottom: none;
+}
+
+.calendar-date__button-reset:hover:after {
+  content: attr(data-title);
+  position: absolute;
+  left: 50%;
+  top: 58px;
+  transform: translateX(-50%);
+  z-index: 1;
+  padding: 10px 20px;
+  color: #434c4e;
+  background-color: #fcf8df;
+  border: 1px solid #fede31;
+  width: 185px;
 }
 
 .calendar-date__button-reset--transparent-bg {
