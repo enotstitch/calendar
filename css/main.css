@@ -276,14 +276,26 @@ td {
 	box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.1);
 }
 
-.calendar__apply {
-	padding: 4px 8px;
-	color: #fff;
+.calendar__control.disabled {
+	pointer-events: none;
+}
+
+.calendar__control.disabled .calendar__apply {
 	background-color: #b2b4b4;
 }
 
-.calendar__reset {
+.calendar__control.disabled .calendar__reset {
 	color: #b2b4b4;
+}
+
+.calendar__apply {
+	padding: 4px 8px;
+	color: #fff;
+	background-color: #fede31;
+}
+
+.calendar__reset {
+	color: #fede31;
 }
 
 .empty-cell {

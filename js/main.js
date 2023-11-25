@@ -1,7 +1,6 @@
 import select from './select.js';
 
 const calendars = document.querySelectorAll('.calendar-date');
-const calendarDateEnd = document.querySelector('.calendar-date--end');
 const calendarItems = document.querySelectorAll('.calendar-form__item');
 
 const SELECT_NAME = {
@@ -14,16 +13,16 @@ const nowDay = now.getDate();
 const nowMonth = now.getMonth() + 1;
 const nowYear = now.getFullYear();
 
-const startDate = {
-	year: nowYear,
-	month: nowMonth,
+let startDate = {
 	day: nowDay,
+	month: nowMonth,
+	year: nowYear,
 };
 
-const endDate = {
-	year: nowYear,
-	month: nowMonth,
+let endDate = {
 	day: nowDay,
+	month: nowMonth,
+	year: nowYear,
 };
 
 const months = {
@@ -75,18 +74,20 @@ function addStyleFullDate(calendarInput) {
 	currentCalendar.append(resetButton);
 }
 
-// function removeStyleFullDate(calendarItem) {
-// 	const currentCalendarInner = calendarItem.querySelector(
-// 		'.calendar-date__inner'
-// 	);
-// 	const resetButton = calendarItem.querySelector(
-// 		'.calendar-date__button-reset'
-// 	);
+function removeStyleFullDate(calendarItem) {
+	const currentCalendarInner = calendarItem.querySelector(
+		'.calendar-date__inner'
+	);
+	const resetButton = calendarItem.querySelector(
+		'.calendar-date__button-reset'
+	);
 
-// 	calendarItem.classList.remove('calendar-date--white-bg');
-// 	currentCalendarInner.classList.remove('calendar-date__inner--peach-bg');
-// 	resetButton.remove();
-// }
+	calendarItem.classList.remove('calendar-date--white-bg');
+	currentCalendarInner.classList.remove('calendar-date__inner--peach-bg');
+	try {
+		resetButton.remove();
+	} catch {}
+}
 
 function removeBackground(calendarItem) {
 	const currentCalendarInner = calendarItem.querySelector(
@@ -124,7 +125,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	addStyleFullDate(dateEndInput);
 
 	calendarItems.forEach((calendarItem) => {
-		calendarItem.addEventListener('click', (event) => {
+		calendarItem.addEventListener('click', () => {
 			const currentValues = calendarItem.querySelectorAll(
 				'.select-current__text'
 			);
@@ -201,7 +202,7 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
         <span class="select-current__text select-current__text--${selectExtraClass}">${selectName}</span>
         <img class="select-current__arrow" src="./icons/arrow.svg" alt="Стрелочка">
       </div>
-      <button class="select__button select__button--next btn-reset"></button>
+      <button class="select__button select__button--next btn-reset" type="button"></button>
     </div>
     <div class="select__body select__body--${selectExtraClass}"></div>
   </div>
@@ -212,19 +213,86 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
 	});
 }
 
-function renderControlBlock(selectsWrap) {
-	const selectsWraps = document.querySelectorAll(selectsWrap);
+function resetForm(event) {
+	const calendarForm = event.target.closest('.calendar-form');
+	const calendarDates = calendarForm.querySelectorAll('.calendar-date');
+	const wrapsSelects = calendarForm.querySelectorAll('.calendar__selects');
 
-	let ControlBlock = `
-  <div class="calendar__control">
-    <button class="calendar__reset btn-reset">Сбросить</button>
-    <button class="calendar__apply btn-reset">Применить</button>
+	calendarForm.reset();
+
+	calendarDates.forEach((calendarDate) => {
+		removeStyleFullDate(calendarDate);
+	});
+	disableControlBlock();
+	wrapsSelects.forEach((wrapSelects) => {
+		wrapSelects.innerHTML = '';
+	});
+	renderSelects(SELECT_NAME.YEAR, 'year', '.calendar__selects');
+	renderSelects(SELECT_NAME.MONTH, 'month', '.calendar__selects');
+}
+
+function acceptForm() {
+	const inputs = document.querySelectorAll('[data-date-input]');
+	inputs.forEach((input) => {
+		const inputValue = input.value;
+		const calendarItem = input.closest('.calendar-form__item');
+
+		if (!inputValue.includes('.') || !inputValue) return;
+		const isStartDateInput = calendarItem.classList.contains(
+			'calendar-form__item--first'
+		);
+		const isEndDateInput = calendarItem.classList.contains(
+			'calendar-form__item--second'
+		);
+
+		const inputDateArr = inputValue.split('.');
+		let currentDay = +inputDateArr[0];
+		let currentMonth = +inputDateArr[1];
+		let currentYear = +inputDateArr[2];
+
+		if (isStartDateInput) {
+			startDate = {
+				day: currentDay,
+				month: currentMonth,
+				year: currentYear,
+			};
+		}
+
+		if (isEndDateInput) {
+			endDate = {
+				day: currentDay,
+				month: currentMonth,
+				year: currentYear,
+			};
+		}
+
+		currentMonth = detectCaseMonth(currentMonth);
+
+		let formattedInputValue = `${currentDay} ${currentMonth} ${currentYear}`;
+
+		input.value = formattedInputValue;
+		disableControlBlock();
+	});
+
+	renderCalendars();
+}
+
+function renderControlBlock() {
+	const calendarBottom = document.querySelector('.calendar__bottom');
+
+	const controlBlock = `
+  <div class="calendar__control disabled">
+    <button class="calendar__reset btn-reset" data-reset-btn type="button">Сбросить</button>
+    <button class="calendar__apply btn-reset" data-accept-btn type="button">Применить</button>
   </div>
 	`;
 
-	selectsWraps.forEach((selectsWrap) => {
-		selectsWrap.innerHTML += ControlBlock;
-	});
+	calendarBottom.innerHTML = controlBlock;
+
+	const formResetBtn = document.querySelector('[data-reset-btn]');
+	const formAcceptBtn = document.querySelector('[data-accept-btn]');
+	formResetBtn.addEventListener('click', resetForm);
+	formAcceptBtn.addEventListener('click', acceptForm);
 }
 
 function createCalendar(elem, year, month) {
@@ -301,13 +369,13 @@ calendars.forEach((calendar) => {
 			wrapSelects.innerHTML = '';
 		});
 
-		renderSelects('Выберите год', 'year', '.calendar__selects');
-		renderSelects('Выберите месяц', 'month', '.calendar__selects');
+		renderSelects(SELECT_NAME.YEAR, 'year', '.calendar__selects');
+		renderSelects(SELECT_NAME.MONTH, 'month', '.calendar__selects');
 
 		createSelectYears('.select__body--year');
 		createSelectMonth('.select__body--month');
 		select();
-		// renderFirstCalendar(startDate.year, startDate.month);
+		renderControlBlock();
 	});
 });
 
@@ -330,174 +398,109 @@ function renderSecondCalendar() {
 }
 
 function renderCalendars() {
-	if (startDate.year && startDate.month && endDate.year && endDate.month) {
-		renderFirstCalendar();
-		renderSecondCalendar();
-	}
+	// if (startDate.year && startDate.month && endDate.year && endDate.month) {
+	renderFirstCalendar();
+	renderSecondCalendar();
+
+	const tables = document.querySelectorAll('table');
+	tables.forEach((table) => {
+		table.addEventListener('click', tableClick);
+	});
+	// }
 }
 
-// calendarDateEnd.addEventListener('click', (event) => {
-//   const isResetBtnClick = event.target.classList.contains(
-//     'calendar-date__button-reset'
-//   );
-//   let currentCalendar = event.target.closest('.calendar-form__item');
-//   let wrapCurrentSelects = currentCalendar.querySelector('.calendar__selects');
+let numNormalize = (num) => {
+	if (num < 10) return `0${num}`;
+	return num;
+};
 
-//   calendarDateEnd.classList.add('calendar-date--white-bg');
-//   removeBackground(calendarDateEnd);
+function enableControlBlock() {
+	const controlBlock = document.querySelector('.calendar__control');
+	controlBlock.classList.remove('disabled');
+}
 
-//   if (isResetBtnClick) {
-//     resetDateInput(calendarDateEnd);
-//     return;
-//   }
+function disableControlBlock() {
+	const controlBlock = document.querySelector('.calendar__control');
+	controlBlock.classList.add('disabled');
+}
 
-//   wrapCurrentSelects.innerHTML = '';
+function dateInputUpdate(modalElem, dateObject) {
+	const modal = document.querySelector(modalElem);
+	const formItem = modal.closest('.calendar-form__item');
+	const input = formItem.querySelector('.calendar-date__input');
+	const currentDay = numNormalize(dateObject.day);
+	const currentMonth = numNormalize(dateObject.month);
+	const currentYear = dateObject.year;
 
-//   renderSelects('Выберите год', 'select__body--end-year', wrapSecondSelects);
-//   renderSelects('Выберите месяц', 'select__body--end-month', wrapSecondSelects);
-//   createSelectYears('.select__body--end-year');
-//   createSelectMonth('.select__body--end-month');
-//   select();
-//   createCalendar('.calendar__modal--first', 2023, 11);
-//   createCalendar('.calendar__modal--second', 2023, 11);
-// });
+	input.value = `${currentDay}.${currentMonth}.${currentYear}`;
+}
 
-// createCalendar('.calendar__item-first', 2023, 11);
-// createCalendar('.calendar__item-second', 2023, 11);
+function tableClick(event) {
+	const cell = event.target;
+	const cellValue = cell.textContent;
+	const modal = cell.closest('.calendar__modal');
+	if (!cellValue || cell.nodeName !== 'TD') return;
 
-// let year = '';
-// let month = '';
+	if (modal.classList.contains('calendar__modal--first')) {
+		startDate.day = +cellValue;
+		dateInputUpdate('.calendar__modal--first', startDate);
+	} else if (modal.classList.contains('calendar__modal--second')) {
+		endDate.day = +cellValue;
+		dateInputUpdate('.calendar__modal--second', endDate);
+	}
 
-// const selects = document.querySelectorAll('.select');
+	enableControlBlock();
+}
 
-// selects.forEach((select) => {
-// 	select.addEventListener('click', (event) => {
-// 		getYaer(event);
-// 		getMonth(event);
-// 		if (year && month) {
-// 			createCalendar('.calendar__modal', year, month);
+window.addEventListener('DOMContentLoaded', () => {
+	const inputs = document.querySelectorAll('[data-date-input]');
 
-// 			let tables = document.querySelectorAll('table');
-// 			tables.forEach((table) => {
-// 				table.addEventListener('click', (event) => {
-// 					event.target.classList.add('active');
-// 				});
-// 			});
-// 		}
-// 	});
-// });
+	function getInputNumbersValue(input) {
+		return input.value.replace(/\D/g, '');
+	}
 
-// function getYaer(event) {
-// 	if (event.target.classList.contains('select__item--year')) {
-// 		year = event.target.textContent;
-// 		return event.target.textContent;
-// 	}
-// }
+	function onDateInput(event) {
+		const input = event.target;
+		const inputNumbersValue = getInputNumbersValue(input);
+		let formattedInputValue = '';
 
-// function getMonth(event) {
-// 	if (event.target.classList.contains('select__item--month')) {
-// 		month = detectMonth(event.target.textContent);
-// 		return detectMonth(event.target.textContent);
-// 	}
-// }
+		if (!inputNumbersValue) {
+			return (input.value = '');
+		}
 
-// let numNorm = (num) => {
-// 	if (num < 10) return `0${num}`;
-// 	return num;
-// };
+		if (['0', '1', '2', '3'].includes(inputNumbersValue[0])) {
+			formattedInputValue = input.value;
+			if (inputNumbersValue.length > 1) {
+				formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+			}
+		} else {
+			input.value = '';
+		}
 
-// let inputRender = () => {
-// 	const tableItems = document.querySelectorAll('td');
+		if (['0', '1'].includes(inputNumbersValue[2])) {
+			if (inputNumbersValue.length >= 3) {
+				formattedInputValue += inputNumbersValue.substring(2, 3);
+			}
+			if (inputNumbersValue.length >= 4) {
+				formattedInputValue += inputNumbersValue.substring(3, 4) + '.';
+			}
+		}
 
-// 	tableItems.forEach((item) => {
-// 		item.addEventListener('click', (event) => {
-// 			const target = event.target;
-// 			if (target.textContent) {
-// 				const calendarItem = target.closest('.calendar-form__item');
-// 				const calendarInput = calendarItem.querySelector(
-// 					'.calendar-date__input'
-// 				);
-// 				calendarInput.value = `${numNorm(target.textContent)} ${detectCaseMonth(
-// 					month
-// 				)} ${year}`;
-// 			}
-// 		});
-// 	});
-// };
+		if (['1', '2'].includes(inputNumbersValue[4])) {
+			if (inputNumbersValue.length >= 5) {
+				formattedInputValue += inputNumbersValue.substring(4, 8);
+			}
+			if (inputNumbersValue.length === 8) {
+				enableControlBlock();
+			} else {
+				disableControlBlock();
+			}
+		}
 
-// document.addEventListener("DOMContentLoaded", function () {
-//     var phoneInputs = document.querySelectorAll('input[data-tel-input]');
+		input.value = formattedInputValue;
+	}
 
-//     var getInputNumbersValue = function (input) {
-//         // Return stripped input value — just numbers
-//         return input.value.replace(/\D/g, '');
-//     }
-
-//     var onPhonePaste = function (e) {
-//         var input = e.target,
-//             inputNumbersValue = getInputNumbersValue(input);
-//         var pasted = e.clipboardData || window.clipboardData;
-//         if (pasted) {
-//             var pastedText = pasted.getData('Text');
-//             if (/\D/g.test(pastedText)) {
-//                 // Attempt to paste non-numeric symbol — remove all non-numeric symbols,
-//                 // formatting will be in onPhoneInput handler
-//                 input.value = inputNumbersValue;
-//                 return;
-//             }
-//         }
-//     }
-
-//     var onPhoneInput = function (e) {
-//         var input = e.target,
-//             inputNumbersValue = getInputNumbersValue(input),
-//             selectionStart = input.selectionStart,
-//             formattedInputValue = "";
-
-//         if (!inputNumbersValue) {
-//             return input.value = "";
-//         }
-
-//         if (input.value.length != selectionStart) {
-//             // Editing in the middle of input, not last symbol
-//             if (e.data && /\D/g.test(e.data)) {
-//                 // Attempt to input non-numeric symbol
-//                 input.value = inputNumbersValue;
-//             }
-//             return;
-//         }
-
-//         if (["7", "8", "9"].indexOf(inputNumbersValue[0]) > -1) {
-//             if (inputNumbersValue[0] == "9") inputNumbersValue = "7" + inputNumbersValue;
-//             var firstSymbols = (inputNumbersValue[0] == "8") ? "8" : "+7";
-//             formattedInputValue = input.value = firstSymbols + " ";
-//             if (inputNumbersValue.length > 1) {
-//                 formattedInputValue += '(' + inputNumbersValue.substring(1, 4);
-//             }
-//             if (inputNumbersValue.length >= 5) {
-//                 formattedInputValue += ') ' + inputNumbersValue.substring(4, 7);
-//             }
-//             if (inputNumbersValue.length >= 8) {
-//                 formattedInputValue += '-' + inputNumbersValue.substring(7, 9);
-//             }
-//             if (inputNumbersValue.length >= 10) {
-//                 formattedInputValue += '-' + inputNumbersValue.substring(9, 11);
-//             }
-//         } else {
-//             formattedInputValue = '+' + inputNumbersValue.substring(0, 16);
-//         }
-//         input.value = formattedInputValue;
-//     }
-//     var onPhoneKeyDown = function (e) {
-//         // Clear input after remove last symbol
-//         var inputValue = e.target.value.replace(/\D/g, '');
-//         if (e.keyCode == 8 && inputValue.length == 1) {
-//             e.target.value = "";
-//         }
-//     }
-//     for (var phoneInput of phoneInputs) {
-//         phoneInput.addEventListener('keydown', onPhoneKeyDown);
-//         phoneInput.addEventListener('input', onPhoneInput, false);
-//         phoneInput.addEventListener('paste', onPhonePaste, false);
-//     }
-// })
+	inputs.forEach((input) => {
+		input.addEventListener('input', onDateInput);
+	});
+});
