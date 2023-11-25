@@ -125,7 +125,7 @@ window.addEventListener('DOMContentLoaded', () => {
   addStyleFullDate(dateEndInput);
 
   calendarItems.forEach((calendarItem) => {
-    calendarItem.addEventListener('click', () => {
+    calendarItem.addEventListener('click', (event) => {
       const currentValues = calendarItem.querySelectorAll(
         '.select-current__text'
       );
@@ -156,7 +156,9 @@ window.addEventListener('DOMContentLoaded', () => {
           }
         }
       });
-      renderCalendars();
+      if (!event.target.classList.contains('calendar-date__button-reset')) {
+        renderCalendars();
+      }
     });
   });
 });
