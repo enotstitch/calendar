@@ -156,9 +156,12 @@ window.addEventListener('DOMContentLoaded', () => {
           }
         }
       });
-      if (!event.target.classList.contains('calendar-date__button-reset')) {
-        renderCalendars();
-      }
+      // if (
+      //   !event.target.classList.contains('calendar-date__button-reset') &&
+      //   !event.target.closest('table')
+      // ) {
+      //   renderCalendars();
+      // }
     });
   });
 });
@@ -275,8 +278,6 @@ function acceptForm() {
     input.value = formattedInputValue;
     disableControlBlock();
   });
-
-  renderCalendars();
 }
 
 function renderControlBlock() {
@@ -400,7 +401,6 @@ function renderSecondCalendar() {
 }
 
 function renderCalendars() {
-  // if (startDate.year && startDate.month && endDate.year && endDate.month) {
   renderFirstCalendar();
   renderSecondCalendar();
 
@@ -408,7 +408,6 @@ function renderCalendars() {
   tables.forEach((table) => {
     table.addEventListener('click', tableClick);
   });
-  // }
 }
 
 let numNormalize = (num) => {
