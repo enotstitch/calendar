@@ -336,7 +336,23 @@ td {
 }
 
 .calendar__reset {
+  position: relative;
   color: #fede31;
+}
+
+.calendar__reset::after {
+  position: absolute;
+  content: '';
+  width: 0;
+  height: 1px;
+  background-color: #fede31;
+  bottom: 6px;
+  right: 0;
+  transition: width 0.1s;
+}
+
+.calendar__reset:hover:after {
+  width: 100%;
 }
 
 .empty-cell {

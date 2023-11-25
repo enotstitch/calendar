@@ -168,7 +168,7 @@ window.addEventListener('DOMContentLoaded', () => {
             renderCalendars();
           } else if (currentValue.closest('.calendar-form__item--second')) {
             endDate.year = currentValueText;
-            renderCalendars();
+            // renderCalendars();
           }
         }
         if (
@@ -507,9 +507,17 @@ window.addEventListener('DOMContentLoaded', () => {
     const input = event.target;
     const inputNumbersValue = getInputNumbersValue(input);
     let formattedInputValue = '';
+    let selectionStart = input.selectionStart;
 
     if (!inputNumbersValue) {
       return (input.value = '');
+    }
+
+    if (input.value.length != selectionStart) {
+      if (event.data && /\D/g.test(event.data)) {
+        input.value = inputNumbersValue;
+      }
+      return;
     }
 
     if (['0', '1', '2', '3'].includes(inputNumbersValue[0])) {
@@ -544,7 +552,18 @@ window.addEventListener('DOMContentLoaded', () => {
     input.value = formattedInputValue;
   }
 
+  function onPhoneKeyDown(event) {
+    let inputValue = event.target.value.replace(/\D/g, '');
+    if (event.keyCode == 8 && inputValue.length == 2) {
+      event.target.value = event.target.value.substring(0, 2);
+    }
+    if (event.keyCode == 8 && inputValue.length == 4) {
+      event.target.value = event.target.value.substring(0, 5);
+    }
+  }
+
   inputs.forEach((input) => {
+    input.addEventListener('keydown', onPhoneKeyDown);
     input.addEventListener('input', onDateInput);
   });
 });
