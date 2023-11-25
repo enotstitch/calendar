@@ -1,91 +1,91 @@
 let select = function () {
-  let selectHeader = document.querySelectorAll('.select-current');
-  let selectItem = document.querySelectorAll('.select__item');
-  let selectBtnsNext = document.querySelectorAll('.select__button--next');
-  let selectBtnsPrev = document.querySelectorAll('.select__button--prev');
+	let selectHeader = document.querySelectorAll('.select-current');
+	let selectItem = document.querySelectorAll('.select__item');
+	let selectBtnsNext = document.querySelectorAll('.select__button--next');
+	let selectBtnsPrev = document.querySelectorAll('.select__button--prev');
 
-  let i = 0;
+	let i = 0;
 
-  selectBtnsNext.forEach((selectBtnNext) => {
-    selectBtnNext.addEventListener('click', (e) => {
-      const currentSelect = e.target.closest('.select');
-      const currentSelectItems =
-        currentSelect.querySelectorAll('.select__item');
-      const currentSelectText = currentSelect.querySelector(
-        '.select-current__text'
-      );
-      const selectWrap = e.target.closest('.calendar__selects');
+	window.addEventListener('click', (event) => {
+		const select = document.querySelector('.select');
+		const isSelectActive = select.classList.contains('is-active');
+		const isSelectClick = event.target.closest('.select');
 
-      try {
-        currentSelectText.textContent = currentSelectItems[--i].textContent;
-        const disabledSelect = selectWrap.querySelector('.disabled');
-        try {
-          disabledSelect.classList.remove('disabled');
-        } catch {}
-      } catch {
-        i = 0;
-      }
-    });
-  });
+		if (isSelectActive && !isSelectClick) {
+			select.classList.remove('is-active');
+		}
+	});
 
-  selectBtnsPrev.forEach((selectBtnPrev) => {
-    selectBtnPrev.addEventListener('click', (e) => {
-      const currentSelect = e.target.closest('.select');
-      const currentSelectItems =
-        currentSelect.querySelectorAll('.select__item');
-      const currentSelectText = currentSelect.querySelector(
-        '.select-current__text'
-      );
-      const selectWrap = e.target.closest('.calendar__selects');
+	selectHeader.forEach((item) => {
+		item.addEventListener('click', selectToggle);
+	});
 
-      try {
-        currentSelectText.textContent = currentSelectItems[++i].textContent;
-        const disabledSelect = selectWrap.querySelector('.disabled');
-        try {
-          disabledSelect.classList.remove('disabled');
-        } catch {}
-      } catch {
-        i = currentSelectItems.length - 1;
-      }
-    });
-  });
+	selectItem.forEach((item) => {
+		item.addEventListener('click', selectChoose);
+	});
 
-  window.addEventListener('click', (event) => {
-    const select = document.querySelector('.select');
-    const isSelectActive = select.classList.contains('is-active');
-    const isSelectClick = event.target.closest('.select');
+	function selectToggle() {
+		const select = this.parentElement.closest('.select');
+		select.classList.toggle('is-active');
+	}
 
-    if (isSelectActive && !isSelectClick) {
-      select.classList.remove('is-active');
-    }
-  });
+	function selectChoose() {
+		let text = this.innerText,
+			select = this.closest('.select'),
+			currentText = select.querySelector('.select-current__text');
+		currentText.innerText = text;
+		select.classList.remove('is-active');
 
-  selectHeader.forEach((item) => {
-    item.addEventListener('click', selectToggle);
-  });
+		const selectWrap = select.closest('.calendar__selects');
+		try {
+			const disabledSelect = selectWrap.querySelector('.disabled');
+			disabledSelect.classList.remove('disabled');
+		} catch {}
+	}
 
-  selectItem.forEach((item) => {
-    item.addEventListener('click', selectChoose);
-  });
+	selectBtnsNext.forEach((selectBtnNext) => {
+		selectBtnNext.addEventListener('click', (e) => {
+			const currentSelect = e.target.closest('.select');
+			const currentSelectItems =
+				currentSelect.querySelectorAll('.select__item');
+			const currentSelectText = currentSelect.querySelector(
+				'.select-current__text'
+			);
+			const selectWrap = e.target.closest('.calendar__selects');
 
-  function selectToggle() {
-    const select = this.parentElement.closest('.select');
-    select.classList.toggle('is-active');
-  }
+			try {
+				currentSelectText.textContent = currentSelectItems[--i].textContent;
+				const disabledSelect = selectWrap.querySelector('.disabled');
+				try {
+					disabledSelect.classList.remove('disabled');
+				} catch {}
+			} catch {
+				i = 0;
+			}
+		});
+	});
 
-  function selectChoose() {
-    let text = this.innerText,
-      select = this.closest('.select'),
-      currentText = select.querySelector('.select-current__text');
-    currentText.innerText = text;
-    select.classList.remove('is-active');
+	selectBtnsPrev.forEach((selectBtnPrev) => {
+		selectBtnPrev.addEventListener('click', (e) => {
+			const currentSelect = e.target.closest('.select');
+			const currentSelectItems =
+				currentSelect.querySelectorAll('.select__item');
+			const currentSelectText = currentSelect.querySelector(
+				'.select-current__text'
+			);
+			const selectWrap = e.target.closest('.calendar__selects');
 
-    const selectWrap = select.closest('.calendar__selects');
-    try {
-      const disabledSelect = selectWrap.querySelector('.disabled');
-      disabledSelect.classList.remove('disabled');
-    } catch {}
-  }
+			try {
+				currentSelectText.textContent = currentSelectItems[++i].textContent;
+				const disabledSelect = selectWrap.querySelector('.disabled');
+				try {
+					disabledSelect.classList.remove('disabled');
+				} catch {}
+			} catch {
+				i = currentSelectItems.length - 1;
+			}
+		});
+	});
 };
 
 export default select;

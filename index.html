@@ -14,15 +14,15 @@
   <div class="calendar">
     <form class="calendar__form calendar-form" action="#">
       <div class="calendar__wrap">
-        <div class="calendar-form__item">
+        <div class="calendar-form__item calendar-form__item--first">
           <div class="calendar__date calendar-date">
             <div class="calendar-date__inner">
               <label for="date-start" class="calendar-date__label">
                 <span class="calendar-date__text">
                   Дата от
                 </span>
-                <input class="calendar-date__input" type="tel" name="date-day" id="date-start" placeholder="ДД.ММ.ГГГГ"
-                  maxlength="8">
+                <input class="calendar-date__input" type="tel" data-date-input name="date-day" id="date-start"
+                  placeholder="ДД.ММ.ГГГГ" maxlength="10">
               </label>
               <button class="calendar-date__button-calendar btn-reset" type="button"></button>
             </div>
@@ -31,15 +31,15 @@
           <div class="calendar__modal calendar__modal--first"></div>
         </div>
 
-        <div class="calendar-form__item">
+        <div class="calendar-form__item calendar-form__item--second">
           <div class="calendar__date calendar-date">
             <div class="calendar-date__inner">
               <label for="date-end" class="calendar-date__label">
                 <span class="calendar-date__text">
                   Дата до
                 </span>
-                <input class="calendar-date__input" data-date-end type="tel" name="date-end" id="date-end"
-                  placeholder="ДД.ММ.ГГГГ">
+                <input class="calendar-date__input" data-date-end data-date-input type="tel" name="date-end"
+                  id="date-end" placeholder="ДД.ММ.ГГГГ" maxlength="10">
               </label>
               <button class="calendar-date__button-calendar btn-reset" type="button"></button>
             </div>
@@ -48,12 +48,12 @@
           <div class="calendar__modal calendar__modal--second"></div>
         </div>
       </div>
-
-
-      <!-- <div class="calendar__control">
-        <button class="calendar__reset btn-reset">Сбросить</button>
-        <button class="calendar__apply btn-reset">Применить</button>
-      </div> -->
+      <div class="calendar__bottom">
+        <!-- <div class="calendar__control">
+          <button class="calendar__reset btn-reset">Сбросить</button>
+          <button class="calendar__apply btn-reset">Применить</button>
+        </div> -->
+      </div>
     </form>
   </div>
 
