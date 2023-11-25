@@ -55,6 +55,21 @@ const numsMonth = {
 	12: 'Декабря',
 };
 
+const nameMonth = {
+	Января: 1,
+	Февраля: 2,
+	Марта: 3,
+	Апреля: 4,
+	Мая: 5,
+	Июня: 6,
+	Июля: 7,
+	Августа: 8,
+	Сентября: 9,
+	Октября: 10,
+	Ноября: 11,
+	Декабря: 12,
+};
+
 const detectMonth = (month) => {
 	return months[month];
 };
@@ -63,15 +78,31 @@ let detectCaseMonth = (num) => {
 	return numsMonth[num];
 };
 
+let detectNameMonth = (num) => {
+	return nameMonth[num];
+};
+
 function addStyleFullDate(calendarInput) {
 	const currentCalendarInner = calendarInput.closest('.calendar-date__inner');
 	const currentCalendar = calendarInput.closest('.calendar-date');
+	const calendarDate = currentCalendarInner.closest('.calendar-date')
 	currentCalendarInner.classList.add('calendar-date__inner--peach-bg');
 	currentCalendar.classList.add('calendar-date--white-bg');
+	const resetButton = calendarDate.querySelector(
+		'.calendar-date__button-reset'
+	);
 
-	const resetButton = document.createElement('button');
-	resetButton.className = 'calendar-date__button-reset btn-reset';
-	currentCalendar.append(resetButton);
+	console.log(currentCalendarInner);
+
+	if (!resetButton) {
+		console.log(1);
+		const resetButton = document.createElement('button');
+		resetButton.className = 'calendar-date__button-reset btn-reset';
+		currentCalendar.append(resetButton);
+	} else {
+		console.log(2);
+		return;
+	}
 }
 
 function removeStyleFullDate(calendarItem) {
@@ -156,7 +187,10 @@ window.addEventListener('DOMContentLoaded', () => {
 					}
 				}
 			});
-			if (!event.target.classList.contains('calendar-date__button-reset')) {
+			if (
+				!event.target.classList.contains('calendar-date__button-reset') &&
+				!event.target.closest('table')
+			) {
 				renderCalendars();
 			}
 		});
@@ -246,6 +280,8 @@ function acceptForm() {
 		const isEndDateInput = calendarItem.classList.contains(
 			'calendar-form__item--second'
 		);
+
+		addStyleFullDate(input);
 
 		const inputDateArr = inputValue.split('.');
 		let currentDay = +inputDateArr[0];
@@ -358,6 +394,17 @@ calendars.forEach((calendar) => {
 
 		let calendarWrap = event.target.closest('.calendar__wrap');
 		let wrapsSelects = calendarWrap.querySelectorAll('.calendar__selects');
+		const input = calendar.querySelector('.calendar-date__input');
+
+		if (input.value && input.value.includes(' ')) {
+			const currentDateArr = input.value.split(' ');
+			let currentDay = currentDateArr[0];
+			let currentMonth = currentDateArr[1];
+			let currentYear = currentDateArr[2];
+			currentMonth = detectNameMonth(currentMonth);
+
+			input.value = `${currentDay}.${currentMonth}.${currentYear}`;
+		}
 
 		calendar.classList.add('calendar-date--white-bg');
 		removeBackground(calendar);
@@ -400,7 +447,6 @@ function renderSecondCalendar() {
 }
 
 function renderCalendars() {
-	// if (startDate.year && startDate.month && endDate.year && endDate.month) {
 	renderFirstCalendar();
 	renderSecondCalendar();
 
@@ -408,7 +454,6 @@ function renderCalendars() {
 	tables.forEach((table) => {
 		table.addEventListener('click', tableClick);
 	});
-	// }
 }
 
 let numNormalize = (num) => {
