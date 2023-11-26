@@ -17,12 +17,14 @@ let startDate = {
 	day: '',
 	month: '',
 	year: '',
+	cellItem: '',
 };
 
 let endDate = {
 	day: nowDay,
 	month: nowMonth,
 	year: nowYear,
+	cellItem: '',
 };
 
 const months = {
@@ -139,6 +141,9 @@ function resetDateInput(calendarItem) {
 		'.calendar-date__button-reset'
 	);
 
+	startDate.cellItem = '';
+	endDate.cellItem = '';
+
 	currentCalendarInput.value = '';
 	calendarItem.classList.remove('calendar-date--white-bg');
 	resetButton.remove();
@@ -190,9 +195,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				!event.target.classList.contains('calendar-date__button-reset') &&
 				!event.target.closest('table')
 			) {
-				//! renderCalendars();
-				renderFirstCalendar();
-				renderSecondCalendar();
+				renderCalendars();
 			}
 		});
 	});
@@ -256,6 +259,10 @@ function resetForm(event) {
 	const wrapsSelects = calendarForm.querySelectorAll('.calendar__selects');
 
 	calendarForm.reset();
+
+	renderCalendars();
+	startDate.cellItem = '';
+	endDate.cellItem = '';
 
 	calendarDates.forEach((calendarDate) => {
 		removeStyleFullDate(calendarDate);
@@ -431,6 +438,7 @@ function renderFirstCalendar() {
 	const currentYear = startDate.year;
 	const currentMonth = startDate.month;
 	const tables = document.querySelectorAll('table');
+	startDate.cellItem = '';
 
 	if (currentYear && currentMonth) {
 		createCalendar('.calendar__modal--first', currentYear, currentMonth);
@@ -444,6 +452,7 @@ function renderSecondCalendar() {
 	const currentYear = endDate.year;
 	const currentMonth = endDate.month;
 	const tables = document.querySelectorAll('table');
+	endDate.cellItem = '';
 
 	if (currentYear && currentMonth) {
 		createCalendar('.calendar__modal--second', currentYear, currentMonth);
@@ -489,12 +498,66 @@ function dateInputUpdate(modalElem, dateObject) {
 	input.value = `${currentDay}.${currentMonth}.${currentYear}`;
 }
 
+function addTableRange() {
+	const startCellItem = startDate.cellItem;
+	const endCellItem = endDate.cellItem;
+	const startDateDay = startDate.day;
+	const endDateDay = endDate.day;
+	const startDateModal = document.querySelector('.calendar__modal--first');
+	const endDateModal = document.querySelector('.calendar__modal--second');
+	const startDateTable = startDateModal.querySelector('table');
+	const endDateTable = endDateModal.querySelector('table');
+
+	if (!startCellItem || !endCellItem) return;
+
+	const selectedItems = document.querySelectorAll('td.background-cell');
+	selectedItems.forEach((item) => {
+		item.classList.remove('background-cell');
+	});
+
+	const startCalendarItems = startDateTable.querySelectorAll('td');
+	startCalendarItems.forEach((item) => {
+		if (
+			item.textContent > startDateDay &&
+			!item.classList.contains('empty-cell')
+		) {
+			item.classList.add('background-cell');
+		}
+	});
+
+	const endCalendarItems = endDateTable.querySelectorAll('td');
+	endCalendarItems.forEach((item) => {
+		if (
+			item.textContent < endDateDay &&
+			!item.classList.contains('empty-cell')
+		) {
+			item.classList.add('background-cell');
+		}
+	});
+
+	if (startDate.year === endDate.year && startDate.month === endDate.month) {
+		//! Не полная покраска
+		return;
+	}
+}
+
 function tableClick(event) {
 	const cell = event.target;
 	const cellValue = cell.textContent;
 	const modal = cell.closest('.calendar__modal');
-	if (!cellValue || cell.nodeName !== 'TD') return;
+	const isCellDateClick = !cellValue || cell.nodeName !== 'TD';
+	const isFirstModal = modal.classList.contains('calendar__modal--first');
+	const isSecondModal = modal.classList.contains('calendar__modal--second');
 
+	if (isFirstModal) {
+		startDate.cellItem = cell;
+	}
+
+	if (isSecondModal) {
+		endDate.cellItem = cell;
+	}
+
+	if (isCellDateClick) return;
 	if (modal.classList.contains('calendar__modal--first')) {
 		startDate.day = +cellValue;
 		dateInputUpdate('.calendar__modal--first', startDate);
@@ -503,9 +566,15 @@ function tableClick(event) {
 		dateInputUpdate('.calendar__modal--second', endDate);
 	}
 
+	try {
+		const currentCell = modal.querySelector('.current-cell');
+		currentCell.classList.remove('current-cell');
+	} catch {}
+
 	cell.classList.add('current-cell');
 
 	enableControlBlock();
+	addTableRange();
 }
 
 window.addEventListener('DOMContentLoaded', () => {

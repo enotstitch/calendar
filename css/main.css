@@ -367,6 +367,10 @@ td {
 	background-color: #fffef4;
 }
 
+.background-cell {
+	background-color: #ffff99;
+}
+
 .current-cell {
 	background-color: #fede31;
 	color: #fff;
