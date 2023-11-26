@@ -520,21 +520,75 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // if (['0', '1', '2'].includes(inputNumbersValue[0])) {
+    //   formattedInputValue = input.value;
+    //   if (inputNumbersValue.length > 1) {
+    //     formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+    //   }
+    // } else {
+    //   input.value = '';
+    // }
+
     if (['0', '1', '2', '3'].includes(inputNumbersValue[0])) {
-      formattedInputValue = input.value;
-      if (inputNumbersValue.length > 1) {
-        formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
-      }
-    } else {
-      input.value = '';
+      formattedInputValue = inputNumbersValue.substring(0, 1) + '.';
+      input.value = formattedInputValue;
+
+      input.setSelectionRange(1, 1);
+      input.addEventListener('keydown', (e) => {
+        if (e.keyCode == 39 && input.value.length < 3) {
+          input.value = '0' + formattedInputValue;
+        }
+      });
+
+      // if (['3'].includes(inputNumbersValue[0])) {
+      //   input.setSelectionRange(
+      //     inputNumbersValue.length,
+      //     inputNumbersValue.length
+      //   );
+      //   formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+      //   input.value = formattedInputValue;
+
+      //   console.log(inputNumbersValue[1]);
+      //   if (inputNumbersValue[1] <= 1) {
+      //     formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+      //   }
+      // }
     }
 
-    if (['0', '1'].includes(inputNumbersValue[2])) {
+    // if (['3'].includes(inputNumbersValue[0])) {
+    //   formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+    //   input.value = formattedInputValue;
+
+    //   input.setSelectionRange(1, 1);
+    //   input.addEventListener('keydown', (e) => {
+    //     if (e.keyCode == 39 && input.value.length < 3) {
+    //       input.value = '0' + formattedInputValue;
+    //     }
+    //   });
+
+    //   if (inputNumbersValue[1] <= 1) {
+    //     formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+    //   }
+    // }
+
+    if (['0'].includes(inputNumbersValue[2])) {
       if (inputNumbersValue.length >= 3) {
         formattedInputValue += inputNumbersValue.substring(2, 3);
       }
       if (inputNumbersValue.length >= 4) {
         formattedInputValue += inputNumbersValue.substring(3, 4) + '.';
+      }
+    }
+
+    if (['1'].includes(inputNumbersValue[2])) {
+      if (inputNumbersValue.length >= 3) {
+        formattedInputValue += inputNumbersValue.substring(2, 3);
+      }
+
+      if (inputNumbersValue[3] <= 2) {
+        if (inputNumbersValue.length >= 4) {
+          formattedInputValue += inputNumbersValue.substring(3, 4) + '.';
+        }
       }
     }
 
@@ -552,7 +606,7 @@ window.addEventListener('DOMContentLoaded', () => {
     input.value = formattedInputValue;
   }
 
-  function onPhoneKeyDown(event) {
+  function onDateKeyDown(event) {
     let inputValue = event.target.value.replace(/\D/g, '');
     if (event.keyCode == 8 && inputValue.length == 2) {
       event.target.value = event.target.value.substring(0, 2);
@@ -563,7 +617,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   inputs.forEach((input) => {
-    input.addEventListener('keydown', onPhoneKeyDown);
+    input.addEventListener('keydown', onDateKeyDown);
     input.addEventListener('input', onDateInput);
   });
 });
