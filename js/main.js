@@ -14,9 +14,9 @@ const nowMonth = now.getMonth() + 1;
 const nowYear = now.getFullYear();
 
 let startDate = {
-	day: nowDay,
-	month: nowMonth,
-	year: nowYear,
+	day: '',
+	month: '',
+	year: '',
 };
 
 let endDate = {
@@ -161,26 +161,28 @@ window.addEventListener('DOMContentLoaded', () => {
 				const currentValueText = currentValue.textContent;
 				if (
 					currentValue.classList.contains('select-current__text--year') &&
-					currentValueText !== SELECT_NAME.YEAR
+					currentValueText !== SELECT_NAME.YEAR &&
+					!event.target.closest('table')
 				) {
 					if (currentValue.closest('.calendar-form__item--first')) {
 						startDate.year = currentValueText;
-						renderCalendars();
+						renderFirstCalendar();
 					} else if (currentValue.closest('.calendar-form__item--second')) {
 						endDate.year = currentValueText;
-						// renderCalendars();
+						renderSecondCalendar();
 					}
 				}
 				if (
 					currentValue.classList.contains('select-current__text--month') &&
-					currentValueText !== SELECT_NAME.MONTH
+					currentValueText !== SELECT_NAME.MONTH &&
+					!event.target.closest('table')
 				) {
 					if (currentValue.closest('.calendar-form__item--first')) {
 						startDate.month = detectMonth(currentValueText);
-						renderCalendars();
+						renderFirstCalendar();
 					} else if (currentValue.closest('.calendar-form__item--second')) {
 						endDate.month = detectMonth(currentValueText);
-						renderCalendars();
+						renderSecondCalendar();
 					}
 				}
 			});
@@ -188,7 +190,9 @@ window.addEventListener('DOMContentLoaded', () => {
 				!event.target.classList.contains('calendar-date__button-reset') &&
 				!event.target.closest('table')
 			) {
-				renderCalendars();
+				//! renderCalendars();
+				renderFirstCalendar();
+				renderSecondCalendar();
 			}
 		});
 	});
@@ -426,18 +430,26 @@ calendars.forEach((calendar) => {
 function renderFirstCalendar() {
 	const currentYear = startDate.year;
 	const currentMonth = startDate.month;
+	const tables = document.querySelectorAll('table');
 
 	if (currentYear && currentMonth) {
 		createCalendar('.calendar__modal--first', currentYear, currentMonth);
+		tables.forEach((table) => {
+			table.addEventListener('click', tableClick);
+		});
 	}
 }
 
 function renderSecondCalendar() {
 	const currentYear = endDate.year;
 	const currentMonth = endDate.month;
+	const tables = document.querySelectorAll('table');
 
 	if (currentYear && currentMonth) {
 		createCalendar('.calendar__modal--second', currentYear, currentMonth);
+		tables.forEach((table) => {
+			table.addEventListener('click', tableClick);
+		});
 	}
 }
 
@@ -512,31 +524,151 @@ window.addEventListener('DOMContentLoaded', () => {
 		if (!inputNumbersValue) {
 			return (input.value = '');
 		}
+		//! Стирание в середине
+		// if (input.value.length != selectionStart) {
+		// 	if (event.data && /\D/g.test(event.data)) {
+		// 		input.value = inputNumbersValue;
+		// 	}
+		// 	return;
+		// }
 
-		if (input.value.length != selectionStart) {
-			if (event.data && /\D/g.test(event.data)) {
-				input.value = inputNumbersValue;
+		//! Оригинал
+		// if (['0', '1', '2'].includes(inputNumbersValue[0])) {
+		// 	formattedInputValue = input.value;
+		// 	if (inputNumbersValue.length > 1) {
+		// 		formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+		// 	}
+		// } else {
+		// 	input.value = '';
+		// }
+
+		//! Маска для дня
+		if (['0', '1', '2'].includes(inputNumbersValue[0])) {
+			formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+			input.value = formattedInputValue;
+
+			if (inputNumbersValue.length < 2) {
+				input.setSelectionRange(1, 1);
+			} else {
+				input.setSelectionRange(input.value.length, input.value.length);
 			}
-			return;
-		}
 
-		if (['0', '1', '2', '3'].includes(inputNumbersValue[0])) {
-			formattedInputValue = input.value;
-			if (inputNumbersValue.length > 1) {
+			input.addEventListener('keydown', (e) => {
+				if (e.keyCode == 39 && input.value.length === 2) {
+					input.value = '0' + formattedInputValue;
+				}
+			});
+		} else if (['3'].includes(inputNumbersValue[0])) {
+			formattedInputValue = inputNumbersValue.substring(0, 1) + '.';
+			input.value = formattedInputValue;
+
+			if (inputNumbersValue.length < 2) {
+				input.setSelectionRange(1, 1);
+			} else {
+				input.setSelectionRange(input.value.length, input.value.length);
+			}
+
+			if (['0', '1'].includes(inputNumbersValue[1])) {
 				formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+			} else {
+				input.setSelectionRange(1, 1);
 			}
+			input.addEventListener('keydown', (e) => {
+				if (e.keyCode == 39 && input.value.length < 3) {
+					input.value = '0' + formattedInputValue;
+				}
+			});
+			input.value = formattedInputValue;
+		} else if (['4', '5', '6', '7', '8', '9'].includes(inputNumbersValue[0])) {
+			formattedInputValue = '0' + inputNumbersValue.substring(0, 1) + '.';
+			input.value = formattedInputValue;
 		} else {
 			input.value = '';
 		}
 
-		if (['0', '1'].includes(inputNumbersValue[2])) {
+		//! Маска для месяца
+		if (['0'].includes(inputNumbersValue[2])) {
+			formattedInputValue += inputNumbersValue.substring(2, 4) + '.';
+			input.value = formattedInputValue;
+
+			if (inputNumbersValue.length < 4) {
+				input.setSelectionRange(4, 4);
+			} else {
+				input.setSelectionRange(input.value.length, input.value.length);
+			}
+		} else if (['1'].includes(inputNumbersValue[2])) {
+			formattedInputValue += inputNumbersValue.substring(2, 3) + '.';
+			input.value = formattedInputValue;
+
+			if (inputNumbersValue.length < 4) {
+				input.setSelectionRange(4, 4);
+			} else {
+				input.setSelectionRange(input.value.length, input.value.length);
+			}
+
+			if (['0', '1', '2'].includes(inputNumbersValue[3])) {
+				formattedInputValue = formattedInputValue.substring(0, 3);
+				formattedInputValue += inputNumbersValue.substring(2, 4) + '.';
+			} else {
+				input.setSelectionRange(4, 4);
+			}
+
+			input.addEventListener('keyup', (e) => {
+				if (e.keyCode == 39 && input.value.length === 5) {
+					formattedInputValue = '0' + formattedInputValue.substring(3, 4) + '.';
+					input.value = input.value.substring(0, 3) + formattedInputValue;
+				}
+			});
+			input.value = formattedInputValue;
+		} else if (
+			['2', '3', '4', '5', '6', '7', '8', '9'].includes(inputNumbersValue[2])
+		) {
+			formattedInputValue = formattedInputValue.substring(0, 3);
+			formattedInputValue += '0' + inputNumbersValue.substring(2, 3) + '.';
+			input.value = formattedInputValue;
+		}
+
+		//! Маска для года
+		if (['1', '2'].includes(inputNumbersValue[4])) {
+			formattedInputValue += inputNumbersValue.substring(4, 9);
+			input.value = formattedInputValue;
+		}
+
+		// if (['3'].includes(inputNumbersValue[0])) {
+		//   formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+		//   input.value = formattedInputValue;
+
+		//   input.setSelectionRange(1, 1);
+		//   input.addEventListener('keydown', (e) => {
+		//     if (e.keyCode == 39 && input.value.length < 3) {
+		//       input.value = '0' + formattedInputValue;
+		//     }
+		//   });
+
+		//   if (inputNumbersValue[1] <= 1) {
+		//     formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+		//   }
+		// }
+
+		if (['0'].includes(inputNumbersValue[2])) {
 			if (inputNumbersValue.length >= 3) {
 				formattedInputValue += inputNumbersValue.substring(2, 3);
 			}
 			if (inputNumbersValue.length >= 4) {
 				formattedInputValue += inputNumbersValue.substring(3, 4) + '.';
 			}
-			
+		}
+
+		if (['1'].includes(inputNumbersValue[2])) {
+			if (inputNumbersValue.length >= 3) {
+				formattedInputValue += inputNumbersValue.substring(2, 3);
+			}
+
+			if (inputNumbersValue[3] <= 2) {
+				if (inputNumbersValue.length >= 4) {
+					formattedInputValue += inputNumbersValue.substring(3, 4) + '.';
+				}
+			}
 		}
 
 		if (['1', '2'].includes(inputNumbersValue[4])) {
@@ -549,7 +681,6 @@ window.addEventListener('DOMContentLoaded', () => {
 				disableControlBlock();
 			}
 		}
-		input.value = formattedInputValue;
 	}
 
 	function onDateKeyDown(event) {
@@ -562,8 +693,17 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
+	function onDateKeyDown(event) {
+		let inputValue = event.target.value.replace(/\D/g, '');
+		if (event.keyCode == 8 && inputValue.length == 2) {
+			event.target.value = event.target.value.substring(0, 2);
+		}
+		if (event.keyCode == 8 && inputValue.length == 4) {
+			event.target.value = event.target.value.substring(0, 5);
+		}
+	}
 	inputs.forEach((input) => {
-		input.addEventListener('keydown', onDateKeyDown);
 		input.addEventListener('input', onDateInput);
+		input.addEventListener('keydown', onDateKeyDown);
 	});
 });
