@@ -17,12 +17,14 @@ let startDate = {
 	day: '',
 	month: '',
 	year: '',
+	cellItem: '',
 };
 
 let endDate = {
 	day: nowDay,
 	month: nowMonth,
 	year: nowYear,
+	cellItem: '',
 };
 
 const months = {
@@ -40,7 +42,7 @@ const months = {
 	Декабрь: 12,
 };
 
-const numsMonth = {
+const numsCaseMonth = {
 	1: 'Января',
 	2: 'Февраля',
 	3: 'Марта',
@@ -53,6 +55,21 @@ const numsMonth = {
 	10: 'Октября',
 	11: 'Ноября',
 	12: 'Декабря',
+};
+
+const numsMonth = {
+	1: 'Январь',
+	2: 'Февраль',
+	3: 'Март',
+	4: 'Апрель',
+	5: 'Май',
+	6: 'Июнь',
+	7: 'Июль',
+	8: 'Август',
+	9: 'Сентябрь',
+	10: 'Октябрь',
+	11: 'Ноябрь',
+	12: 'Декабрь',
 };
 
 const nameMonth = {
@@ -75,13 +92,18 @@ const detectMonth = (month) => {
 };
 
 let detectCaseMonth = (num) => {
-	return numsMonth[num];
+	return numsCaseMonth[num];
 };
 
 let detectNameMonth = (num) => {
 	return nameMonth[num];
 };
 
+let detectNumberMonth = (num) => {
+	return numsMonth[num];
+};
+
+//* Добавление стилей для заполненного инпута
 function addStyleFullDate(calendarInput) {
 	const currentCalendarInner = calendarInput.closest('.calendar-date__inner');
 	const currentCalendar = calendarInput.closest('.calendar-date');
@@ -98,10 +120,11 @@ function addStyleFullDate(calendarInput) {
 		resetButton.setAttribute('data-title', 'Очистить поле?');
 		currentCalendar.append(resetButton);
 	} else {
-		return;
+		resetButton.classList.remove('calendar-date__button-reset--transparent-bg');
 	}
 }
 
+//* Удаление стилей для заполненного инпута
 function removeStyleFullDate(calendarItem) {
 	const currentCalendarInner = calendarItem.querySelector(
 		'.calendar-date__inner'
@@ -117,6 +140,7 @@ function removeStyleFullDate(calendarItem) {
 	} catch {}
 }
 
+//* Удаление фона
 function removeBackground(calendarItem) {
 	const currentCalendarInner = calendarItem.querySelector(
 		'.calendar-date__inner'
@@ -131,6 +155,7 @@ function removeBackground(calendarItem) {
 	}
 }
 
+//* Сброс инпута
 function resetDateInput(calendarItem) {
 	const currentCalendarInput = calendarItem.querySelector(
 		'.calendar-date__input'
@@ -144,6 +169,7 @@ function resetDateInput(calendarItem) {
 	resetButton.remove();
 }
 
+//* Рендер по умолчанию
 window.addEventListener('DOMContentLoaded', () => {
 	const dateEndInput = document.querySelector('[data-date-end]');
 	const monthName = detectCaseMonth(nowMonth);
@@ -190,14 +216,13 @@ window.addEventListener('DOMContentLoaded', () => {
 				!event.target.classList.contains('calendar-date__button-reset') &&
 				!event.target.closest('table')
 			) {
-				//! renderCalendars();
-				renderFirstCalendar();
-				renderSecondCalendar();
+				renderCalendars();
 			}
 		});
 	});
 });
 
+//* Создание селекта (год)
 function createSelectYears(selectBody) {
 	let selectBodies = document.querySelectorAll(selectBody);
 
@@ -213,6 +238,7 @@ function createSelectYears(selectBody) {
 	});
 }
 
+//* Создание селекта (месяц)
 function createSelectMonth(selectBody) {
 	let selectBodies = document.querySelectorAll(selectBody);
 
@@ -228,15 +254,49 @@ function createSelectMonth(selectBody) {
 	});
 }
 
+//* Рендер селектов
 function renderSelects(selectName, selectExtraClass, selectsWrap) {
 	const selectsWraps = document.querySelectorAll(selectsWrap);
 
-	let select = `
+	selectsWraps.forEach((selectsWrap) => {
+		let currentSelectName = '';
+		const calendarItem = selectsWrap.closest('.calendar-form__item');
+		const isStartCalendar = calendarItem.classList.contains(
+			'calendar-form__item--first'
+		);
+		const isEndCalendar = calendarItem.classList.contains(
+			'calendar-form__item--second'
+		);
+		const isYearSelect = selectName === SELECT_NAME.YEAR;
+		const isMonthSelect = selectName === SELECT_NAME.MONTH;
+
+		if (isStartCalendar) {
+			if (isYearSelect) {
+				currentSelectName = startDate.year ? startDate.year : selectName;
+			}
+			if (isMonthSelect) {
+				currentSelectName = startDate.month
+					? detectNumberMonth(startDate.month)
+					: selectName;
+			}
+		}
+		if (isEndCalendar) {
+			if (isYearSelect) {
+				currentSelectName = endDate.year ? endDate.year : selectName;
+			}
+			if (isMonthSelect) {
+				currentSelectName = endDate.month
+					? detectNumberMonth(endDate.month)
+					: selectName;
+			}
+		}
+
+		let select = `
   <div class="calendar__select select">
     <div class="select__header">
       <button class="select__button select__button--prev btn-reset" type="button"></button>
       <div class="select__current select-current">
-        <span class="select-current__text select-current__text--${selectExtraClass}">${selectName}</span>
+        <span class="select-current__text select-current__text--${selectExtraClass}">${currentSelectName}</span>
         <img class="select-current__arrow" src="./icons/arrow.svg" alt="Стрелочка">
       </div>
       <button class="select__button select__button--next btn-reset" type="button"></button>
@@ -245,17 +305,21 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
   </div>
 	`;
 
-	selectsWraps.forEach((selectsWrap) => {
 		selectsWrap.innerHTML += select;
 	});
 }
 
+//* Нажатие на "Сбросить"
 function resetForm(event) {
 	const calendarForm = event.target.closest('.calendar-form');
 	const calendarDates = calendarForm.querySelectorAll('.calendar-date');
 	const wrapsSelects = calendarForm.querySelectorAll('.calendar__selects');
 
 	calendarForm.reset();
+
+	renderCalendars();
+	startDate.cellItem = '';
+	endDate.cellItem = '';
 
 	calendarDates.forEach((calendarDate) => {
 		removeStyleFullDate(calendarDate);
@@ -268,6 +332,7 @@ function resetForm(event) {
 	renderSelects(SELECT_NAME.MONTH, 'month', '.calendar__selects');
 }
 
+//* Нажатие на "Применить"
 function acceptForm() {
 	const inputs = document.querySelectorAll('[data-date-input]');
 	inputs.forEach((input) => {
@@ -294,6 +359,7 @@ function acceptForm() {
 				day: currentDay,
 				month: currentMonth,
 				year: currentYear,
+				...startDate,
 			};
 		}
 
@@ -302,6 +368,7 @@ function acceptForm() {
 				day: currentDay,
 				month: currentMonth,
 				year: currentYear,
+				...endDate,
 			};
 		}
 
@@ -310,10 +377,12 @@ function acceptForm() {
 		let formattedInputValue = `${currentDay} ${currentMonth} ${currentYear}`;
 
 		input.value = formattedInputValue;
-		disableControlBlock();
 	});
+	disableControlBlock();
+	closePopups();
 }
 
+//* Рендер контрол. блока
 function renderControlBlock() {
 	const calendarBottom = document.querySelector('.calendar__bottom');
 
@@ -332,6 +401,7 @@ function renderControlBlock() {
 	formAcceptBtn.addEventListener('click', acceptForm);
 }
 
+//* Создание календаря
 function createCalendar(elem, year, month) {
 	elem = document.querySelector(elem);
 
@@ -386,6 +456,7 @@ calendars.forEach((calendar) => {
 		calendar.classList.add('calendar-date--white-bg');
 	});
 
+	//* Обработка клика по таблице
 	calendar.addEventListener('click', (event) => {
 		const isResetBtnClick = event.target.classList.contains(
 			'calendar-date__button-reset'
@@ -400,7 +471,9 @@ calendars.forEach((calendar) => {
 			let currentDay = currentDateArr[0];
 			let currentMonth = currentDateArr[1];
 			let currentYear = currentDateArr[2];
+			currentDay = numNormalize(currentDay);
 			currentMonth = detectNameMonth(currentMonth);
+			currentMonth = numNormalize(currentMonth);
 
 			input.value = `${currentDay}.${currentMonth}.${currentYear}`;
 		}
@@ -424,9 +497,11 @@ calendars.forEach((calendar) => {
 		createSelectMonth('.select__body--month');
 		select();
 		renderControlBlock();
+		addTableRange();
 	});
 });
 
+//* Рендер первого календаря
 function renderFirstCalendar() {
 	const currentYear = startDate.year;
 	const currentMonth = startDate.month;
@@ -440,6 +515,7 @@ function renderFirstCalendar() {
 	}
 }
 
+//* Рендер второго календаря
 function renderSecondCalendar() {
 	const currentYear = endDate.year;
 	const currentMonth = endDate.month;
@@ -453,6 +529,7 @@ function renderSecondCalendar() {
 	}
 }
 
+//* Рендер обоих календарей
 function renderCalendars() {
 	renderFirstCalendar();
 	renderSecondCalendar();
@@ -463,21 +540,25 @@ function renderCalendars() {
 	});
 }
 
+//* Нормализация цифр (5 => 05)
 let numNormalize = (num) => {
 	if (num < 10) return `0${num}`;
 	return num;
 };
 
+//* Включение контрол. блока
 function enableControlBlock() {
 	const controlBlock = document.querySelector('.calendar__control');
 	controlBlock.classList.remove('disabled');
 }
 
+//* Отключение контрол. блока
 function disableControlBlock() {
 	const controlBlock = document.querySelector('.calendar__control');
 	controlBlock.classList.add('disabled');
 }
 
+//* Замена даты на формат ДД.ММ.ГГГГ
 function dateInputUpdate(modalElem, dateObject) {
 	const modal = document.querySelector(modalElem);
 	const formItem = modal.closest('.calendar-form__item');
@@ -489,12 +570,83 @@ function dateInputUpdate(modalElem, dateObject) {
 	input.value = `${currentDay}.${currentMonth}.${currentYear}`;
 }
 
+//* Закрытие всех элементов кроме инпутов
+function closePopups() {
+	const selects = document.querySelectorAll('.select');
+	const tables = document.querySelectorAll('table');
+	const controlBlock = document.querySelector('.calendar__control');
+
+	selects.forEach((select) => {
+		select.remove();
+	});
+	tables.forEach((table) => {
+		table.remove();
+	});
+	controlBlock.remove();
+}
+
+//* Добавление диапазона в таблицу
+function addTableRange() {
+	const startCellItem = startDate.cellItem;
+	const endCellItem = endDate.cellItem;
+	const startDateDay = startDate.day;
+	const endDateDay = endDate.day;
+	const startDateModal = document.querySelector('.calendar__modal--first');
+	const endDateModal = document.querySelector('.calendar__modal--second');
+	const startDateTable = startDateModal.querySelector('table');
+	const endDateTable = endDateModal.querySelector('table');
+
+	if (!startCellItem || !endCellItem) return;
+
+	const selectedItems = document.querySelectorAll('td.background-cell');
+	selectedItems.forEach((item) => {
+		item.classList.remove('background-cell');
+	});
+
+	const startCalendarItems = startDateTable.querySelectorAll('td');
+	startCalendarItems.forEach((item) => {
+		if (
+			item.textContent > startDateDay &&
+			!item.classList.contains('empty-cell')
+		) {
+			item.classList.add('background-cell');
+		}
+	});
+
+	const endCalendarItems = endDateTable.querySelectorAll('td');
+	endCalendarItems.forEach((item) => {
+		if (
+			item.textContent < endDateDay &&
+			!item.classList.contains('empty-cell')
+		) {
+			item.classList.add('background-cell');
+		}
+	});
+
+	if (startDate.year === endDate.year && startDate.month === endDate.month) {
+		//* Не полная покраска
+		return;
+	}
+}
+
+//* Обработка клика по таблице
 function tableClick(event) {
 	const cell = event.target;
 	const cellValue = cell.textContent;
 	const modal = cell.closest('.calendar__modal');
-	if (!cellValue || cell.nodeName !== 'TD') return;
+	const isCellDateClick = !cellValue || cell.nodeName !== 'TD';
+	const isFirstModal = modal.classList.contains('calendar__modal--first');
+	const isSecondModal = modal.classList.contains('calendar__modal--second');
 
+	if (isFirstModal) {
+		startDate.cellItem = cell;
+	}
+
+	if (isSecondModal) {
+		endDate.cellItem = cell;
+	}
+
+	if (isCellDateClick) return;
 	if (modal.classList.contains('calendar__modal--first')) {
 		startDate.day = +cellValue;
 		dateInputUpdate('.calendar__modal--first', startDate);
@@ -503,11 +655,18 @@ function tableClick(event) {
 		dateInputUpdate('.calendar__modal--second', endDate);
 	}
 
+	try {
+		const currentCell = modal.querySelector('.current-cell');
+		currentCell.classList.remove('current-cell');
+	} catch {}
+
 	cell.classList.add('current-cell');
 
 	enableControlBlock();
+	addTableRange();
 }
 
+//* Маска
 window.addEventListener('DOMContentLoaded', () => {
 	const inputs = document.querySelectorAll('[data-date-input]');
 
@@ -524,7 +683,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		if (!inputNumbersValue) {
 			return (input.value = '');
 		}
-		//! Стирание в середине
+		//* Стирание в середине
 		// if (input.value.length != selectionStart) {
 		// 	if (event.data && /\D/g.test(event.data)) {
 		// 		input.value = inputNumbersValue;
@@ -532,7 +691,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		// 	return;
 		// }
 
-		//! Оригинал
+		//* Оригинал
 		// if (['0', '1', '2'].includes(inputNumbersValue[0])) {
 		// 	formattedInputValue = input.value;
 		// 	if (inputNumbersValue.length > 1) {
@@ -542,7 +701,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		// 	input.value = '';
 		// }
 
-		//! Маска для дня
+		//* Маска для дня
 		if (['0', '1', '2'].includes(inputNumbersValue[0])) {
 			formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
 			input.value = formattedInputValue;
@@ -586,7 +745,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			input.value = '';
 		}
 
-		//! Маска для месяца
+		//* Маска для месяца
 		if (['0'].includes(inputNumbersValue[2])) {
 			formattedInputValue += inputNumbersValue.substring(2, 4) + '.';
 			input.value = formattedInputValue;
@@ -628,7 +787,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			input.value = formattedInputValue;
 		}
 
-		//! Маска для года
+		//* Маска для года
 		if (['1', '2'].includes(inputNumbersValue[4])) {
 			formattedInputValue += inputNumbersValue.substring(4, 9);
 			input.value = formattedInputValue;
