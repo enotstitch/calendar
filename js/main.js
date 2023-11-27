@@ -230,7 +230,7 @@ function createSelectYears(selectBody) {
 	selectBodies.forEach((selectBody) => {
 		let minYear = nowYear - 20;
 
-		for (let year = nowYear; year >= minYear; year--) {
+		for (let year = nowYear; year > minYear; year--) {
 			const selectItem = document.createElement('div');
 			selectItem.className = 'select__item';
 			selectItem.textContent = `${year}`;
@@ -261,6 +261,7 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
 
 	selectsWraps.forEach((selectsWrap) => {
 		let currentSelectName = '';
+		let dataSetName = '';
 		const calendarItem = selectsWrap.closest('.calendar-form__item');
 		const isStartCalendar = calendarItem.classList.contains(
 			'calendar-form__item--first'
@@ -274,26 +275,30 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
 		if (isStartCalendar) {
 			if (isYearSelect) {
 				currentSelectName = startDate.year ? startDate.year : selectName;
+				dataSetName = 'year-select';
 			}
 			if (isMonthSelect) {
 				currentSelectName = startDate.month
 					? detectNumberMonth(startDate.month)
 					: selectName;
+				dataSetName = 'month-select';
 			}
 		}
 		if (isEndCalendar) {
 			if (isYearSelect) {
 				currentSelectName = endDate.year ? endDate.year : selectName;
+				dataSetName = 'year-select';
 			}
 			if (isMonthSelect) {
 				currentSelectName = endDate.month
 					? detectNumberMonth(endDate.month)
 					: selectName;
+				dataSetName = 'month-select';
 			}
 		}
 
 		let select = `
-  <div class="calendar__select select">
+  <div class="calendar__select select" data-${dataSetName}>
     <div class="select__header">
       <button class="select__button select__button--prev btn-reset" type="button"></button>
       <div class="select__current select-current">
