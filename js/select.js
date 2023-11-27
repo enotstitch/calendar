@@ -1,3 +1,29 @@
+const now = new Date();
+const nowYear = now.getFullYear();
+
+const month = [
+	'Январь',
+	'Февраль',
+	'Март',
+	'Апрель',
+	'Май',
+	'Июнь',
+	'Июль',
+	'Август',
+	'Сентябрь',
+	'Октябрь',
+	'Ноябрь',
+	'Декабрь',
+];
+
+const years = [];
+
+let minYear = nowYear - 20;
+
+for (let year = nowYear; year > minYear; year--) {
+	years.push(year);
+}
+
 let select = function () {
 	let selectHeader = document.querySelectorAll('.select-current');
 	let selectItem = document.querySelectorAll('.select__item');
@@ -52,6 +78,17 @@ let select = function () {
 				'.select-current__text'
 			);
 			const selectWrap = e.target.closest('.calendar__selects');
+			const isYearSelect = currentSelect.closest('[data-year-select]');
+			const isMonthSelect = currentSelect.closest('[data-month-select]');
+
+			if (isYearSelect) {
+				let indexOfItem = years.indexOf(+currentSelectText.textContent);
+				i = indexOfItem++;
+			}
+			if (isMonthSelect) {
+				let indexOfItem = month.indexOf(currentSelectText.textContent);
+				i = indexOfItem++;
+			}
 
 			try {
 				currentSelectText.textContent = currentSelectItems[--i].textContent;
@@ -74,6 +111,17 @@ let select = function () {
 				'.select-current__text'
 			);
 			const selectWrap = e.target.closest('.calendar__selects');
+			const isYearSelect = currentSelect.closest('[data-year-select]');
+			const isMonthSelect = currentSelect.closest('[data-month-select]');
+
+			if (isYearSelect) {
+				let indexOfItem = years.indexOf(+currentSelectText.textContent);
+				i = indexOfItem++;
+			}
+			if (isMonthSelect) {
+				let indexOfItem = month.indexOf(currentSelectText.textContent);
+				i = indexOfItem++;
+			}
 
 			try {
 				currentSelectText.textContent = currentSelectItems[++i].textContent;

@@ -217,6 +217,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				!event.target.closest('table')
 			) {
 				renderCalendars();
+				addTableRange();
 			}
 		});
 	});
@@ -224,18 +225,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
 //* Создание селекта (год)
 function createSelectYears(selectBody) {
-  let selectBodies = document.querySelectorAll(selectBody);
+	let selectBodies = document.querySelectorAll(selectBody);
 
-  selectBodies.forEach((selectBody) => {
-    let minYear = nowYear - 20;
+	selectBodies.forEach((selectBody) => {
+		let minYear = nowYear - 20;
 
-    for (let year = nowYear; year >= minYear; year--) {
-      const selectItem = document.createElement('div');
-      selectItem.className = 'select__item';
-      selectItem.textContent = `${year}`;
-      selectBody.append(selectItem);
-    }
-  });
+		for (let year = nowYear; year > minYear; year--) {
+			const selectItem = document.createElement('div');
+			selectItem.className = 'select__item';
+			selectItem.textContent = `${year}`;
+			selectBody.append(selectItem);
+		}
+	});
 }
 
 //* Создание селекта (месяц)
@@ -260,6 +261,7 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
 
 	selectsWraps.forEach((selectsWrap) => {
 		let currentSelectName = '';
+		let dataSetName = '';
 		const calendarItem = selectsWrap.closest('.calendar-form__item');
 		const isStartCalendar = calendarItem.classList.contains(
 			'calendar-form__item--first'
@@ -273,26 +275,30 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
 		if (isStartCalendar) {
 			if (isYearSelect) {
 				currentSelectName = startDate.year ? startDate.year : selectName;
+				dataSetName = 'year-select';
 			}
 			if (isMonthSelect) {
 				currentSelectName = startDate.month
 					? detectNumberMonth(startDate.month)
 					: selectName;
+				dataSetName = 'month-select';
 			}
 		}
 		if (isEndCalendar) {
 			if (isYearSelect) {
 				currentSelectName = endDate.year ? endDate.year : selectName;
+				dataSetName = 'year-select';
 			}
 			if (isMonthSelect) {
 				currentSelectName = endDate.month
 					? detectNumberMonth(endDate.month)
 					: selectName;
+				dataSetName = 'month-select';
 			}
 		}
 
 		let select = `
-  <div class="calendar__select select">
+  <div class="calendar__select select" data-${dataSetName}>
     <div class="select__header">
       <button class="select__button select__button--prev btn-reset" type="button"></button>
       <div class="select__current select-current">
@@ -593,40 +599,73 @@ function addTableRange() {
 	const endDateDay = endDate.day;
 	const startDateModal = document.querySelector('.calendar__modal--first');
 	const endDateModal = document.querySelector('.calendar__modal--second');
-	const startDateTable = startDateModal.querySelector('table');
-	const endDateTable = endDateModal.querySelector('table');
+	const startCalendarItems = startDateModal.querySelectorAll('td');
+	const endCalendarItems = endDateModal.querySelectorAll('td');
+	const selectedItems = document.querySelectorAll('td.background-cell');
+	const currentItems = document.querySelectorAll('td.current-cell');
 
 	if (!startCellItem || !endCellItem) return;
 
-	const selectedItems = document.querySelectorAll('td.background-cell');
 	selectedItems.forEach((item) => {
 		item.classList.remove('background-cell');
 	});
+	currentItems.forEach((item) => {
+		item.classList.remove('current-cell');
+	});
 
-	const startCalendarItems = startDateTable.querySelectorAll('td');
+	if (startDate.year === endDate.year && startDate.month === endDate.month) {
+		startCalendarItems.forEach((item) => {
+			if (
+				item.textContent > startDateDay &&
+				item.textContent < endDateDay &&
+				!item.classList.contains('empty-cell')
+			) {
+				item.classList.add('background-cell');
+			} else if (
+				item.textContent == startDateDay ||
+				item.textContent == endDateDay
+			) {
+				item.classList.add('current-cell');
+			}
+		});
+		endCalendarItems.forEach((item) => {
+			if (
+				item.textContent < endDateDay &&
+				item.textContent > startDateDay &&
+				!item.classList.contains('empty-cell')
+			) {
+				item.classList.add('background-cell');
+			} else if (
+				item.textContent == endDateDay ||
+				item.textContent == startDateDay
+			) {
+				item.classList.add('current-cell');
+			}
+		});
+		return;
+	}
+
 	startCalendarItems.forEach((item) => {
 		if (
 			item.textContent > startDateDay &&
 			!item.classList.contains('empty-cell')
 		) {
 			item.classList.add('background-cell');
+		} else if (item.textContent == startDateDay) {
+			item.classList.add('current-cell');
 		}
 	});
 
-	const endCalendarItems = endDateTable.querySelectorAll('td');
 	endCalendarItems.forEach((item) => {
 		if (
 			item.textContent < endDateDay &&
 			!item.classList.contains('empty-cell')
 		) {
 			item.classList.add('background-cell');
+		} else if (item.textContent == endDateDay) {
+			item.classList.add('current-cell');
 		}
 	});
-
-	if (startDate.year === endDate.year && startDate.month === endDate.month) {
-		//* Не полная покраска
-		return;
-	}
 }
 
 //* Обработка клика по таблице
