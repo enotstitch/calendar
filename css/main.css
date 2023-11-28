@@ -57,7 +57,6 @@ input {
   justify-content: center;
   width: 100%;
   height: 100vh;
-  background-color: #fffef4;
   padding: 50px;
 }
 
@@ -376,4 +375,48 @@ td {
 .current-cell {
   background-color: #fede31;
   color: #fff;
+}
+
+@media (max-width: 480px) {
+  .calendar {
+    padding: 25px;
+  }
+
+  .calendar-form__item {
+    max-width: 100%;
+  }
+
+  .calendar__control {
+    flex-direction: column-reverse;
+    gap: 10px;
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .calendar__apply {
+    padding: 15px;
+  }
+
+  .calendar__reset {
+    padding: 15px;
+    background-color: #fff;
+    color: #665800;
+    border: 1px solid #fede31;
+  }
+
+  .calendar__reset:hover:after {
+    width: 0;
+    height: 0;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  td,
+  th {
+    width: 100%;
+    height: 100%;
+  }
 }

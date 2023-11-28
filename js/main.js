@@ -4,8 +4,8 @@ const calendars = document.querySelectorAll('.calendar-date');
 const calendarItems = document.querySelectorAll('.calendar-form__item');
 
 const SELECT_NAME = {
-	YEAR: 'Выберите год',
-	MONTH: 'Выберите месяц',
+  YEAR: 'Выберите год',
+  MONTH: 'Выберите месяц',
 };
 
 const now = new Date();
@@ -28,18 +28,18 @@ let endDate = {
 };
 
 const months = {
-	Январь: 1,
-	Февраль: 2,
-	Март: 3,
-	Апрель: 4,
-	Май: 5,
-	Июнь: 6,
-	Июль: 7,
-	Август: 8,
-	Сентябрь: 9,
-	Октябрь: 10,
-	Ноябрь: 11,
-	Декабрь: 12,
+  Январь: 1,
+  Февраль: 2,
+  Март: 3,
+  Апрель: 4,
+  Май: 5,
+  Июнь: 6,
+  Июль: 7,
+  Август: 8,
+  Сентябрь: 9,
+  Октябрь: 10,
+  Ноябрь: 11,
+  Декабрь: 12,
 };
 
 const numsCaseMonth = {
@@ -73,22 +73,22 @@ const numsMonth = {
 };
 
 const nameMonth = {
-	Января: 1,
-	Февраля: 2,
-	Марта: 3,
-	Апреля: 4,
-	Мая: 5,
-	Июня: 6,
-	Июля: 7,
-	Августа: 8,
-	Сентября: 9,
-	Октября: 10,
-	Ноября: 11,
-	Декабря: 12,
+  Января: 1,
+  Февраля: 2,
+  Марта: 3,
+  Апреля: 4,
+  Мая: 5,
+  Июня: 6,
+  Июля: 7,
+  Августа: 8,
+  Сентября: 9,
+  Октября: 10,
+  Ноября: 11,
+  Декабря: 12,
 };
 
 const detectMonth = (month) => {
-	return months[month];
+  return months[month];
 };
 
 let detectCaseMonth = (num) => {
@@ -96,7 +96,7 @@ let detectCaseMonth = (num) => {
 };
 
 let detectNameMonth = (num) => {
-	return nameMonth[num];
+  return nameMonth[num];
 };
 
 let detectNumberMonth = (num) => {
@@ -105,14 +105,14 @@ let detectNumberMonth = (num) => {
 
 //* Добавление стилей для заполненного инпута
 function addStyleFullDate(calendarInput) {
-	const currentCalendarInner = calendarInput.closest('.calendar-date__inner');
-	const currentCalendar = calendarInput.closest('.calendar-date');
-	const calendarDate = currentCalendarInner.closest('.calendar-date');
-	currentCalendarInner.classList.add('calendar-date__inner--peach-bg');
-	currentCalendar.classList.add('calendar-date--white-bg');
-	const resetButton = calendarDate.querySelector(
-		'.calendar-date__button-reset'
-	);
+  const currentCalendarInner = calendarInput.closest('.calendar-date__inner');
+  const currentCalendar = calendarInput.closest('.calendar-date');
+  const calendarDate = currentCalendarInner.closest('.calendar-date');
+  currentCalendarInner.classList.add('calendar-date__inner--peach-bg');
+  currentCalendar.classList.add('calendar-date--white-bg');
+  const resetButton = calendarDate.querySelector(
+    '.calendar-date__button-reset'
+  );
 
   if (!resetButton) {
     const resetButton = document.createElement('button');
@@ -126,57 +126,57 @@ function addStyleFullDate(calendarInput) {
 
 //* Удаление стилей для заполненного инпута
 function removeStyleFullDate(calendarItem) {
-	const currentCalendarInner = calendarItem.querySelector(
-		'.calendar-date__inner'
-	);
-	const resetButton = calendarItem.querySelector(
-		'.calendar-date__button-reset'
-	);
+  const currentCalendarInner = calendarItem.querySelector(
+    '.calendar-date__inner'
+  );
+  const resetButton = calendarItem.querySelector(
+    '.calendar-date__button-reset'
+  );
 
-	calendarItem.classList.remove('calendar-date--white-bg');
-	currentCalendarInner.classList.remove('calendar-date__inner--peach-bg');
-	try {
-		resetButton.remove();
-	} catch {}
+  calendarItem.classList.remove('calendar-date--white-bg');
+  currentCalendarInner.classList.remove('calendar-date__inner--peach-bg');
+  try {
+    resetButton.remove();
+  } catch {}
 }
 
 //* Удаление фона
 function removeBackground(calendarItem) {
-	const currentCalendarInner = calendarItem.querySelector(
-		'.calendar-date__inner'
-	);
-	const resetButton = calendarItem.querySelector(
-		'.calendar-date__button-reset'
-	);
+  const currentCalendarInner = calendarItem.querySelector(
+    '.calendar-date__inner'
+  );
+  const resetButton = calendarItem.querySelector(
+    '.calendar-date__button-reset'
+  );
 
-	currentCalendarInner.classList.remove('calendar-date__inner--peach-bg');
-	if (resetButton) {
-		resetButton.classList.add('calendar-date__button-reset--transparent-bg');
-	}
+  currentCalendarInner.classList.remove('calendar-date__inner--peach-bg');
+  if (resetButton) {
+    resetButton.classList.add('calendar-date__button-reset--transparent-bg');
+  }
 }
 
 //* Сброс инпута
 function resetDateInput(calendarItem) {
-	const currentCalendarInput = calendarItem.querySelector(
-		'.calendar-date__input'
-	);
-	const resetButton = calendarItem.querySelector(
-		'.calendar-date__button-reset'
-	);
+  const currentCalendarInput = calendarItem.querySelector(
+    '.calendar-date__input'
+  );
+  const resetButton = calendarItem.querySelector(
+    '.calendar-date__button-reset'
+  );
 
-	currentCalendarInput.value = '';
-	calendarItem.classList.remove('calendar-date--white-bg');
-	resetButton.remove();
+  currentCalendarInput.value = '';
+  calendarItem.classList.remove('calendar-date--white-bg');
+  resetButton.remove();
 }
 
 //* Рендер по умолчанию
 window.addEventListener('DOMContentLoaded', () => {
-	const dateEndInput = document.querySelector('[data-date-end]');
-	const monthName = detectCaseMonth(nowMonth);
+  const dateEndInput = document.querySelector('[data-date-end]');
+  const monthName = detectCaseMonth(nowMonth);
 
-	dateEndInput.value = `${nowDay} ${monthName} ${nowYear}`;
+  dateEndInput.value = `${nowDay} ${monthName} ${nowYear}`;
 
-	addStyleFullDate(dateEndInput);
+  addStyleFullDate(dateEndInput);
 
   calendarItems.forEach((calendarItem) => {
     calendarItem.addEventListener('click', (event) => {
@@ -241,23 +241,23 @@ function createSelectYears(selectBody) {
 
 //* Создание селекта (месяц)
 function createSelectMonth(selectBody) {
-	let selectBodies = document.querySelectorAll(selectBody);
+  let selectBodies = document.querySelectorAll(selectBody);
 
-	selectBodies.forEach((selectBody) => {
-		const currentSelect = selectBody.closest('.select');
-		currentSelect.classList.add('disabled');
-		for (const month in months) {
-			const selectItem = document.createElement('div');
-			selectItem.className = 'select__item';
-			selectItem.textContent = `${month}`;
-			selectBody.append(selectItem);
-		}
-	});
+  selectBodies.forEach((selectBody) => {
+    const currentSelect = selectBody.closest('.select');
+    currentSelect.classList.add('disabled');
+    for (const month in months) {
+      const selectItem = document.createElement('div');
+      selectItem.className = 'select__item';
+      selectItem.textContent = `${month}`;
+      selectBody.append(selectItem);
+    }
+  });
 }
 
 //* Рендер селектов
 function renderSelects(selectName, selectExtraClass, selectsWrap) {
-	const selectsWraps = document.querySelectorAll(selectsWrap);
+  const selectsWraps = document.querySelectorAll(selectsWrap);
 
   selectsWraps.forEach((selectsWrap) => {
     let currentSelectName = '';
@@ -317,11 +317,11 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
 
 //* Нажатие на "Сбросить"
 function resetForm(event) {
-	const calendarForm = event.target.closest('.calendar-form');
-	const calendarDates = calendarForm.querySelectorAll('.calendar-date');
-	const wrapsSelects = calendarForm.querySelectorAll('.calendar__selects');
+  const calendarForm = event.target.closest('.calendar-form');
+  const calendarDates = calendarForm.querySelectorAll('.calendar-date');
+  const wrapsSelects = calendarForm.querySelectorAll('.calendar__selects');
 
-	calendarForm.reset();
+  calendarForm.reset();
 
   renderCalendars();
   startDate.cellItem = '';
@@ -340,25 +340,25 @@ function resetForm(event) {
 
 //* Нажатие на "Применить"
 function acceptForm() {
-	const inputs = document.querySelectorAll('[data-date-input]');
-	inputs.forEach((input) => {
-		const inputValue = input.value;
-		const calendarItem = input.closest('.calendar-form__item');
+  const inputs = document.querySelectorAll('[data-date-input]');
+  inputs.forEach((input) => {
+    const inputValue = input.value;
+    const calendarItem = input.closest('.calendar-form__item');
 
-		if (!inputValue.includes('.') || !inputValue) return;
-		const isStartDateInput = calendarItem.classList.contains(
-			'calendar-form__item--first'
-		);
-		const isEndDateInput = calendarItem.classList.contains(
-			'calendar-form__item--second'
-		);
+    if (!inputValue.includes('.') || !inputValue) return;
+    const isStartDateInput = calendarItem.classList.contains(
+      'calendar-form__item--first'
+    );
+    const isEndDateInput = calendarItem.classList.contains(
+      'calendar-form__item--second'
+    );
 
-		addStyleFullDate(input);
+    addStyleFullDate(input);
 
-		const inputDateArr = inputValue.split('.');
-		let currentDay = +inputDateArr[0];
-		let currentMonth = +inputDateArr[1];
-		let currentYear = +inputDateArr[2];
+    const inputDateArr = inputValue.split('.');
+    let currentDay = +inputDateArr[0];
+    let currentMonth = +inputDateArr[1];
+    let currentYear = +inputDateArr[2];
 
     if (isStartDateInput) {
       startDate = {
@@ -378,9 +378,9 @@ function acceptForm() {
       };
     }
 
-		currentMonth = detectCaseMonth(currentMonth);
+    currentMonth = detectCaseMonth(currentMonth);
 
-		let formattedInputValue = `${currentDay} ${currentMonth} ${currentYear}`;
+    let formattedInputValue = `${currentDay} ${currentMonth} ${currentYear}`;
 
     input.value = formattedInputValue;
   });
@@ -390,31 +390,31 @@ function acceptForm() {
 
 //* Рендер контрол. блока
 function renderControlBlock() {
-	const calendarBottom = document.querySelector('.calendar__bottom');
+  const calendarBottom = document.querySelector('.calendar__bottom');
 
-	const controlBlock = `
+  const controlBlock = `
   <div class="calendar__control disabled">
     <button class="calendar__reset btn-reset" data-reset-btn type="button">Сбросить</button>
     <button class="calendar__apply btn-reset" data-accept-btn type="button">Применить</button>
   </div>
 	`;
 
-	calendarBottom.innerHTML = controlBlock;
+  calendarBottom.innerHTML = controlBlock;
 
-	const formResetBtn = document.querySelector('[data-reset-btn]');
-	const formAcceptBtn = document.querySelector('[data-accept-btn]');
-	formResetBtn.addEventListener('click', resetForm);
-	formAcceptBtn.addEventListener('click', acceptForm);
+  const formResetBtn = document.querySelector('[data-reset-btn]');
+  const formAcceptBtn = document.querySelector('[data-accept-btn]');
+  formResetBtn.addEventListener('click', resetForm);
+  formAcceptBtn.addEventListener('click', acceptForm);
 }
 
 //* Создание календаря
 function createCalendar(elem, year, month) {
-	elem = document.querySelector(elem);
+  elem = document.querySelector(elem);
 
-	let mon = month - 1;
-	let d = new Date(year, mon);
+  let mon = month - 1;
+  let d = new Date(year, mon);
 
-	let table = `
+  let table = `
     <table>
     <tbody>
       <tr>
@@ -429,38 +429,38 @@ function createCalendar(elem, year, month) {
       <tr>
   `;
 
-	for (let i = 0; i < getDay(d); i++) {
-		table += '<td class="empty-cell"></td>';
-	}
+  for (let i = 0; i < getDay(d); i++) {
+    table += '<td class="empty-cell"></td>';
+  }
 
-	while (d.getMonth() == mon) {
-		table += '<td>' + d.getDate() + '</td>';
-		if (getDay(d) % 7 == 6) {
-			table += '</tr><tr>';
-		}
-		d.setDate(d.getDate() + 1);
-	}
+  while (d.getMonth() == mon) {
+    table += '<td>' + d.getDate() + '</td>';
+    if (getDay(d) % 7 == 6) {
+      table += '</tr><tr>';
+    }
+    d.setDate(d.getDate() + 1);
+  }
 
-	table += '</tr></tbody></table>';
-	elem.innerHTML = table;
+  table += '</tr></tbody></table>';
+  elem.innerHTML = table;
 }
 
 function getDay(date) {
-	let day = date.getDay();
-	if (day == 0) day = 7;
-	return day - 1;
+  let day = date.getDay();
+  if (day == 0) day = 7;
+  return day - 1;
 }
 
 calendars.forEach((calendar) => {
-	let currentInputDate = calendar.querySelector('.calendar-date__input');
+  let currentInputDate = calendar.querySelector('.calendar-date__input');
 
-	currentInputDate.addEventListener('blur', () => {
-		calendar.classList.remove('calendar-date--white-bg');
-	});
+  currentInputDate.addEventListener('blur', () => {
+    calendar.classList.remove('calendar-date--white-bg');
+  });
 
-	currentInputDate.addEventListener('focus', () => {
-		calendar.classList.add('calendar-date--white-bg');
-	});
+  currentInputDate.addEventListener('focus', () => {
+    calendar.classList.add('calendar-date--white-bg');
+  });
 
   //* Обработка клика по таблице
   calendar.addEventListener('click', (event) => {
@@ -468,9 +468,9 @@ calendars.forEach((calendar) => {
       'calendar-date__button-reset'
     );
 
-		let calendarWrap = event.target.closest('.calendar__wrap');
-		let wrapsSelects = calendarWrap.querySelectorAll('.calendar__selects');
-		const input = calendar.querySelector('.calendar-date__input');
+    let calendarWrap = event.target.closest('.calendar__wrap');
+    let wrapsSelects = calendarWrap.querySelectorAll('.calendar__selects');
+    const input = calendar.querySelector('.calendar-date__input');
 
     if (input.value && input.value.includes(' ')) {
       const currentDateArr = input.value.split(' ');
@@ -481,23 +481,23 @@ calendars.forEach((calendar) => {
       currentMonth = detectNameMonth(currentMonth);
       currentMonth = numNormalize(currentMonth);
 
-			input.value = `${currentDay}.${currentMonth}.${currentYear}`;
-		}
+      input.value = `${currentDay}.${currentMonth}.${currentYear}`;
+    }
 
-		calendar.classList.add('calendar-date--white-bg');
-		removeBackground(calendar);
+    calendar.classList.add('calendar-date--white-bg');
+    removeBackground(calendar);
 
-		if (isResetBtnClick) {
-			resetDateInput(calendar);
-			return;
-		}
+    if (isResetBtnClick) {
+      resetDateInput(calendar);
+      return;
+    }
 
-		wrapsSelects.forEach((wrapSelects) => {
-			wrapSelects.innerHTML = '';
-		});
+    wrapsSelects.forEach((wrapSelects) => {
+      wrapSelects.innerHTML = '';
+    });
 
-		renderSelects(SELECT_NAME.YEAR, 'year', '.calendar__selects');
-		renderSelects(SELECT_NAME.MONTH, 'month', '.calendar__selects');
+    renderSelects(SELECT_NAME.YEAR, 'year', '.calendar__selects');
+    renderSelects(SELECT_NAME.MONTH, 'month', '.calendar__selects');
 
     createSelectYears('.select__body--year');
     createSelectMonth('.select__body--month');
@@ -509,71 +509,71 @@ calendars.forEach((calendar) => {
 
 //* Рендер первого календаря
 function renderFirstCalendar() {
-	const currentYear = startDate.year;
-	const currentMonth = startDate.month;
-	const tables = document.querySelectorAll('table');
+  const currentYear = startDate.year;
+  const currentMonth = startDate.month;
+  const tables = document.querySelectorAll('table');
 
-	if (currentYear && currentMonth) {
-		createCalendar('.calendar__modal--first', currentYear, currentMonth);
-		tables.forEach((table) => {
-			table.addEventListener('click', tableClick);
-		});
-	}
+  if (currentYear && currentMonth) {
+    createCalendar('.calendar__modal--first', currentYear, currentMonth);
+    tables.forEach((table) => {
+      table.addEventListener('click', tableClick);
+    });
+  }
 }
 
 //* Рендер второго календаря
 function renderSecondCalendar() {
-	const currentYear = endDate.year;
-	const currentMonth = endDate.month;
-	const tables = document.querySelectorAll('table');
+  const currentYear = endDate.year;
+  const currentMonth = endDate.month;
+  const tables = document.querySelectorAll('table');
 
-	if (currentYear && currentMonth) {
-		createCalendar('.calendar__modal--second', currentYear, currentMonth);
-		tables.forEach((table) => {
-			table.addEventListener('click', tableClick);
-		});
-	}
+  if (currentYear && currentMonth) {
+    createCalendar('.calendar__modal--second', currentYear, currentMonth);
+    tables.forEach((table) => {
+      table.addEventListener('click', tableClick);
+    });
+  }
 }
 
 //* Рендер обоих календарей
 function renderCalendars() {
-	renderFirstCalendar();
-	renderSecondCalendar();
+  renderFirstCalendar();
+  renderSecondCalendar();
 
-	const tables = document.querySelectorAll('table');
-	tables.forEach((table) => {
-		table.addEventListener('click', tableClick);
-	});
+  const tables = document.querySelectorAll('table');
+  tables.forEach((table) => {
+    table.addEventListener('click', tableClick);
+  });
 }
 
 //* Нормализация цифр (5 => 05)
 let numNormalize = (num) => {
-	if (num < 10) return `0${num}`;
-	return num;
+  if (num < 10) return `0${num}`;
+  return num;
 };
 
 //* Включение контрол. блока
 function enableControlBlock() {
-	const controlBlock = document.querySelector('.calendar__control');
-	controlBlock.classList.remove('disabled');
+  const controlBlock = document.querySelector('.calendar__control');
+  controlBlock.classList.remove('disabled');
 }
 
 //* Отключение контрол. блока
 function disableControlBlock() {
-	const controlBlock = document.querySelector('.calendar__control');
-	controlBlock.classList.add('disabled');
+  const controlBlock = document.querySelector('.calendar__control');
+  controlBlock.classList.add('disabled');
 }
 
 //* Замена даты на формат ДД.ММ.ГГГГ
 function dateInputUpdate(modalElem, dateObject) {
-	const modal = document.querySelector(modalElem);
-	const formItem = modal.closest('.calendar-form__item');
-	const input = formItem.querySelector('.calendar-date__input');
-	const currentDay = numNormalize(dateObject.day);
-	const currentMonth = numNormalize(dateObject.month);
-	const currentYear = dateObject.year;
+  const modal = document.querySelector(modalElem);
+  const formItem = modal.closest('.calendar-form__item');
+  const input = formItem.querySelector('.calendar-date__input');
+  const currentDay = numNormalize(dateObject.day);
+  const currentMonth = numNormalize(dateObject.month);
+  const currentYear = dateObject.year;
 
-	input.value = `${currentDay}.${currentMonth}.${currentYear}`;
+  input.value = `${currentDay}.${currentMonth}.${currentYear}`;
 }
 
 //* Закрытие всех элементов кроме инпутов
@@ -707,185 +707,185 @@ function tableClick(event) {
 
 // * Маска
 window.addEventListener('DOMContentLoaded', () => {
-	const inputs = document.querySelectorAll('[data-date-input]');
+  const inputs = document.querySelectorAll('[data-date-input]');
 
-	function getInputNumbersValue(input) {
-		return input.value.replace(/\D/g, '');
-	}
+  function getInputNumbersValue(input) {
+    return input.value.replace(/\D/g, '');
+  }
 
-	function onDateInput(event) {
-		const input = event.target;
-		const inputNumbersValue = getInputNumbersValue(input);
-		let formattedInputValue = '';
-		let selectionStart = input.selectionStart;
-		let day, month, year;
+  function onDateInput(event) {
+    const input = event.target;
+    const inputNumbersValue = getInputNumbersValue(input);
+    let formattedInputValue = '';
+    let selectionStart = input.selectionStart;
+    let day, month, year;
 
-		if (!inputNumbersValue) {
-			return (input.value = '');
-		}
+    if (!inputNumbersValue) {
+      return (input.value = '');
+    }
 
-		if (event.inputType === 'deleteContentBackward') {
-			input.setSelectionRange(selectionStart, selectionStart);
-			return;
-		}
+    if (event.inputType === 'deleteContentBackward') {
+      input.setSelectionRange(selectionStart, selectionStart);
+      return;
+    }
 
-		function formattedFix() {
-			let dateArr = input.value.split('.');
-			day = dateArr[0];
-			month = dateArr[1];
-			year = dateArr[2];
-		}
-		formattedFix();
+    function formattedFix() {
+      let dateArr = input.value.split('.');
+      day = dateArr[0];
+      month = dateArr[1];
+      year = dateArr[2];
+    }
+    formattedFix();
 
-		if (input.value.length != selectionStart) {
-			if ((selectionStart == 0 || selectionStart == 1) && day.length !== 2) {
-				return;
-			}
-			if ((selectionStart == 3 || selectionStart == 4) && month.length !== 2) {
-				return;
-			}
-			if (
-				(selectionStart == 6 ||
-					selectionStart == 7 ||
-					selectionStart == 8 ||
-					selectionStart == 9) &&
-				year.length !== 4
-			) {
-				return;
-			}
+    if (input.value.length != selectionStart) {
+      if ((selectionStart == 0 || selectionStart == 1) && day.length !== 2) {
+        return;
+      }
+      if ((selectionStart == 3 || selectionStart == 4) && month.length !== 2) {
+        return;
+      }
+      if (
+        (selectionStart == 6 ||
+          selectionStart == 7 ||
+          selectionStart == 8 ||
+          selectionStart == 9) &&
+        year.length !== 4
+      ) {
+        return;
+      }
 
-			input.setSelectionRange(input.value.length, input.value.length);
-		}
+      input.setSelectionRange(input.value.length, input.value.length);
+    }
 
-		//* Стирание в середине
-		// if (input.value.length != selectionStart) {
-		// 	if (event.data && /\D/g.test(event.data)) {
-		// 		input.value = inputNumbersValue;
-		// 	}
-		// 	return;
-		// }
+    //* Стирание в середине
+    // if (input.value.length != selectionStart) {
+    // 	if (event.data && /\D/g.test(event.data)) {
+    // 		input.value = inputNumbersValue;
+    // 	}
+    // 	return;
+    // }
 
-		//* Оригинал
-		// if (['0', '1', '2'].includes(inputNumbersValue[0])) {
-		// 	formattedInputValue = input.value;
-		// 	if (inputNumbersValue.length > 1) {
-		// 		formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
-		// 	}
-		// } else {
-		// 	input.value = '';
-		// }
+    //* Оригинал
+    // if (['0', '1', '2'].includes(inputNumbersValue[0])) {
+    // 	formattedInputValue = input.value;
+    // 	if (inputNumbersValue.length > 1) {
+    // 		formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+    // 	}
+    // } else {
+    // 	input.value = '';
+    // }
 
     //* Маска для дня
     if (['0', '1', '2'].includes(inputNumbersValue[0])) {
       formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
       input.value = formattedInputValue;
 
-			if (inputNumbersValue.length < 2) {
-				input.setSelectionRange(1, 1);
-			} else {
-				input.setSelectionRange(input.value.length, input.value.length);
-			}
+      if (inputNumbersValue.length < 2) {
+        input.setSelectionRange(1, 1);
+      } else {
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
 
-			input.addEventListener('keydown', (e) => {
-				if (e.keyCode == 39 && input.value.length === 2) {
-					input.value = '0' + formattedInputValue;
-				}
-			});
-		} else if (['3'].includes(inputNumbersValue[0])) {
-			formattedInputValue = inputNumbersValue.substring(0, 1) + '.';
-			input.value = formattedInputValue;
+      input.addEventListener('keydown', (e) => {
+        if (e.keyCode == 39 && input.value.length === 2) {
+          input.value = '0' + formattedInputValue;
+        }
+      });
+    } else if (['3'].includes(inputNumbersValue[0])) {
+      formattedInputValue = inputNumbersValue.substring(0, 1) + '.';
+      input.value = formattedInputValue;
 
-			if (inputNumbersValue.length < 2) {
-				input.setSelectionRange(1, 1);
-			} else {
-				input.setSelectionRange(input.value.length, input.value.length);
-			}
+      if (inputNumbersValue.length < 2) {
+        input.setSelectionRange(1, 1);
+      } else {
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
 
-			if (['0', '1'].includes(inputNumbersValue[1])) {
-				formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
-			} else {
-				input.setSelectionRange(1, 1);
-			}
-			input.addEventListener('keydown', (e) => {
-				if (e.keyCode == 39 && input.value.length < 3) {
-					input.value = '0' + formattedInputValue;
-				}
-			});
-			input.value = formattedInputValue;
-		} else if (['4', '5', '6', '7', '8', '9'].includes(inputNumbersValue[0])) {
-			formattedInputValue = '0' + inputNumbersValue.substring(0, 1) + '.';
-			input.value = formattedInputValue;
-		} else {
-			input.value = '';
-		}
+      if (['0', '1'].includes(inputNumbersValue[1])) {
+        formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
+      } else {
+        input.setSelectionRange(1, 1);
+      }
+      input.addEventListener('keydown', (e) => {
+        if (e.keyCode == 39 && input.value.length < 3) {
+          input.value = '0' + formattedInputValue;
+        }
+      });
+      input.value = formattedInputValue;
+    } else if (['4', '5', '6', '7', '8', '9'].includes(inputNumbersValue[0])) {
+      formattedInputValue = '0' + inputNumbersValue.substring(0, 1) + '.';
+      input.value = formattedInputValue;
+    } else {
+      input.value = '';
+    }
 
     //* Маска для месяца
     if (['0'].includes(inputNumbersValue[2])) {
       formattedInputValue += inputNumbersValue.substring(2, 4) + '.';
       input.value = formattedInputValue;
 
-			if (inputNumbersValue.length < 4) {
-				input.setSelectionRange(4, 4);
-			} else {
-				input.setSelectionRange(input.value.length, input.value.length);
-			}
-		} else if (['1'].includes(inputNumbersValue[2])) {
-			formattedInputValue += inputNumbersValue.substring(2, 3) + '.';
-			input.value = formattedInputValue;
+      if (inputNumbersValue.length < 4) {
+        input.setSelectionRange(4, 4);
+      } else {
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
+    } else if (['1'].includes(inputNumbersValue[2])) {
+      formattedInputValue += inputNumbersValue.substring(2, 3) + '.';
+      input.value = formattedInputValue;
 
-			if (inputNumbersValue.length < 4) {
-				input.setSelectionRange(4, 4);
-			} else {
-				input.setSelectionRange(input.value.length, input.value.length);
-			}
+      if (inputNumbersValue.length < 4) {
+        input.setSelectionRange(4, 4);
+      } else {
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
 
-			if (['0', '1', '2'].includes(inputNumbersValue[3])) {
-				formattedInputValue = formattedInputValue.substring(0, 3);
-				formattedInputValue += inputNumbersValue.substring(2, 4) + '.';
-			} else {
-				input.setSelectionRange(4, 4);
-			}
+      if (['0', '1', '2'].includes(inputNumbersValue[3])) {
+        formattedInputValue = formattedInputValue.substring(0, 3);
+        formattedInputValue += inputNumbersValue.substring(2, 4) + '.';
+      } else {
+        input.setSelectionRange(4, 4);
+      }
 
-			input.addEventListener('keyup', (e) => {
-				if (e.keyCode == 39 && input.value.length === 5) {
-					formattedInputValue = '0' + formattedInputValue.substring(3, 4) + '.';
-					input.value = input.value.substring(0, 3) + formattedInputValue;
-				}
-			});
-			input.value = formattedInputValue;
-		} else if (
-			['2', '3', '4', '5', '6', '7', '8', '9'].includes(inputNumbersValue[2])
-		) {
-			formattedInputValue = formattedInputValue.substring(0, 3);
-			formattedInputValue += '0' + inputNumbersValue.substring(2, 3) + '.';
-			input.value = formattedInputValue;
-		}
+      input.addEventListener('keyup', (e) => {
+        if (e.keyCode == 39 && input.value.length === 5) {
+          formattedInputValue = '0' + formattedInputValue.substring(3, 4) + '.';
+          input.value = input.value.substring(0, 3) + formattedInputValue;
+        }
+      });
+      input.value = formattedInputValue;
+    } else if (
+      ['2', '3', '4', '5', '6', '7', '8', '9'].includes(inputNumbersValue[2])
+    ) {
+      formattedInputValue = formattedInputValue.substring(0, 3);
+      formattedInputValue += '0' + inputNumbersValue.substring(2, 3) + '.';
+      input.value = formattedInputValue;
+    }
 
-		//* Маска для года
-		if (['1', '2'].includes(inputNumbersValue[4])) {
-			formattedInputValue += inputNumbersValue.substring(4, 9);
-			input.value = formattedInputValue;
-		}
-	}
+    //* Маска для года
+    if (['1', '2'].includes(inputNumbersValue[4])) {
+      formattedInputValue += inputNumbersValue.substring(4, 9);
+      input.value = formattedInputValue;
+    }
+  }
 
-	function onDateKeyDown(event) {
-		let inputValue = event.target.value.replace(/\D/g, '');
-		if (event.keyCode == 8 && inputValue.length == 2) {
-			event.target.value = event.target.value.substring(0, 2);
-		}
-		if (event.keyCode == 8 && inputValue.length == 4) {
-			event.target.value = event.target.value.substring(0, 5);
-		}
-	}
-	inputs.forEach((input) => {
-		input.addEventListener('input', onDateInput);
-		input.addEventListener('keydown', onDateKeyDown);
-		input.addEventListener('keyup', (e) => {
-			if (e.target.value.length === 10) {
-				enableControlBlock();
-			} else {
-				disableControlBlock();
-			}
-		});
-	});
+  function onDateKeyDown(event) {
+    let inputValue = event.target.value.replace(/\D/g, '');
+    if (event.keyCode == 8 && inputValue.length == 2) {
+      event.target.value = event.target.value.substring(0, 2);
+    }
+    if (event.keyCode == 8 && inputValue.length == 4) {
+      event.target.value = event.target.value.substring(0, 5);
+    }
+  }
+  inputs.forEach((input) => {
+    input.addEventListener('input', onDateInput);
+    input.addEventListener('keydown', onDateKeyDown);
+    input.addEventListener('keyup', (e) => {
+      if (e.target.value.length === 10) {
+        enableControlBlock();
+      } else {
+        disableControlBlock();
+      }
+    });
+  });
 });
