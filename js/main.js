@@ -718,10 +718,45 @@ window.addEventListener('DOMContentLoaded', () => {
 		const inputNumbersValue = getInputNumbersValue(input);
 		let formattedInputValue = '';
 		let selectionStart = input.selectionStart;
+		let day, month, year;
 
 		if (!inputNumbersValue) {
 			return (input.value = '');
 		}
+
+		if (event.inputType === 'deleteContentBackward') {
+			input.setSelectionRange(selectionStart, selectionStart);
+			return;
+		}
+
+		function formattedFix() {
+			let dateArr = input.value.split('.');
+			day = dateArr[0];
+			month = dateArr[1];
+			year = dateArr[2];
+		}
+		formattedFix();
+
+		if (input.value.length != selectionStart) {
+			if ((selectionStart == 0 || selectionStart == 1) && day.length !== 2) {
+				return;
+			}
+			if ((selectionStart == 3 || selectionStart == 4) && month.length !== 2) {
+				return;
+			}
+			if (
+				(selectionStart == 6 ||
+					selectionStart == 7 ||
+					selectionStart == 8 ||
+					selectionStart == 9) &&
+				year.length !== 4
+			) {
+				return;
+			}
+
+			input.setSelectionRange(input.value.length, input.value.length);
+		}
+
 		//* Стирание в середине
 		// if (input.value.length != selectionStart) {
 		// 	if (event.data && /\D/g.test(event.data)) {
