@@ -866,64 +866,6 @@ window.addEventListener('DOMContentLoaded', () => {
 			formattedInputValue += inputNumbersValue.substring(4, 9);
 			input.value = formattedInputValue;
 		}
-
-		// if (['3'].includes(inputNumbersValue[0])) {
-		//   formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
-		//   input.value = formattedInputValue;
-
-		//   input.setSelectionRange(1, 1);
-		//   input.addEventListener('keydown', (e) => {
-		//     if (e.keyCode == 39 && input.value.length < 3) {
-		//       input.value = '0' + formattedInputValue;
-		//     }
-		//   });
-
-		//   if (inputNumbersValue[1] <= 1) {
-		//     formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
-		//   }
-		// }
-
-		if (['0'].includes(inputNumbersValue[2])) {
-			if (inputNumbersValue.length >= 3) {
-				formattedInputValue += inputNumbersValue.substring(2, 3);
-			}
-			if (inputNumbersValue.length >= 4) {
-				formattedInputValue += inputNumbersValue.substring(3, 4) + '.';
-			}
-		}
-
-		if (['1'].includes(inputNumbersValue[2])) {
-			if (inputNumbersValue.length >= 3) {
-				formattedInputValue += inputNumbersValue.substring(2, 3);
-			}
-
-			if (inputNumbersValue[3] <= 2) {
-				if (inputNumbersValue.length >= 4) {
-					formattedInputValue += inputNumbersValue.substring(3, 4) + '.';
-				}
-			}
-		}
-
-		if (['1', '2'].includes(inputNumbersValue[4])) {
-			if (inputNumbersValue.length >= 5) {
-				formattedInputValue += inputNumbersValue.substring(4, 8);
-			}
-			if (inputNumbersValue.length === 8) {
-				enableControlBlock();
-			} else {
-				disableControlBlock();
-			}
-		}
-	}
-
-	function onDateKeyDown(event) {
-		let inputValue = event.target.value.replace(/\D/g, '');
-		if (event.keyCode == 8 && inputValue.length == 2) {
-			event.target.value = event.target.value.substring(0, 2);
-		}
-		if (event.keyCode == 8 && inputValue.length == 4) {
-			event.target.value = event.target.value.substring(0, 5);
-		}
 	}
 
 	function onDateKeyDown(event) {
@@ -938,5 +880,12 @@ window.addEventListener('DOMContentLoaded', () => {
 	inputs.forEach((input) => {
 		input.addEventListener('input', onDateInput);
 		input.addEventListener('keydown', onDateKeyDown);
+		input.addEventListener('keyup', (e) => {
+			if (e.target.value.length === 10) {
+				enableControlBlock();
+			} else {
+				disableControlBlock();
+			}
+		});
 	});
 });
