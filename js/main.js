@@ -178,65 +178,65 @@ window.addEventListener('DOMContentLoaded', () => {
 
   addStyleFullDate(dateEndInput);
 
-	calendarItems.forEach((calendarItem) => {
-		calendarItem.addEventListener('click', (event) => {
-			const currentValues = calendarItem.querySelectorAll(
-				'.select-current__text'
-			);
-			currentValues.forEach((currentValue) => {
-				const currentValueText = currentValue.textContent;
-				if (
-					currentValue.classList.contains('select-current__text--year') &&
-					currentValueText !== SELECT_NAME.YEAR &&
-					!event.target.closest('table')
-				) {
-					if (currentValue.closest('.calendar-form__item--first')) {
-						startDate.year = currentValueText;
-						renderFirstCalendar();
-					} else if (currentValue.closest('.calendar-form__item--second')) {
-						endDate.year = currentValueText;
-						renderSecondCalendar();
-					}
-				}
-				if (
-					currentValue.classList.contains('select-current__text--month') &&
-					currentValueText !== SELECT_NAME.MONTH &&
-					!event.target.closest('table')
-				) {
-					if (currentValue.closest('.calendar-form__item--first')) {
-						startDate.month = detectMonth(currentValueText);
-						renderFirstCalendar();
-					} else if (currentValue.closest('.calendar-form__item--second')) {
-						endDate.month = detectMonth(currentValueText);
-						renderSecondCalendar();
-					}
-				}
-			});
-			if (
-				!event.target.classList.contains('calendar-date__button-reset') &&
-				!event.target.closest('table')
-			) {
-				renderCalendars();
-				addTableRange();
-			}
-		});
-	});
+  calendarItems.forEach((calendarItem) => {
+    calendarItem.addEventListener('click', (event) => {
+      const currentValues = calendarItem.querySelectorAll(
+        '.select-current__text'
+      );
+      currentValues.forEach((currentValue) => {
+        const currentValueText = currentValue.textContent;
+        if (
+          currentValue.classList.contains('select-current__text--year') &&
+          currentValueText !== SELECT_NAME.YEAR &&
+          !event.target.closest('table')
+        ) {
+          if (currentValue.closest('.calendar-form__item--first')) {
+            startDate.year = currentValueText;
+            renderFirstCalendar();
+          } else if (currentValue.closest('.calendar-form__item--second')) {
+            endDate.year = currentValueText;
+            renderSecondCalendar();
+          }
+        }
+        if (
+          currentValue.classList.contains('select-current__text--month') &&
+          currentValueText !== SELECT_NAME.MONTH &&
+          !event.target.closest('table')
+        ) {
+          if (currentValue.closest('.calendar-form__item--first')) {
+            startDate.month = detectMonth(currentValueText);
+            renderFirstCalendar();
+          } else if (currentValue.closest('.calendar-form__item--second')) {
+            endDate.month = detectMonth(currentValueText);
+            renderSecondCalendar();
+          }
+        }
+      });
+      if (
+        !event.target.classList.contains('calendar-date__button-reset') &&
+        !event.target.closest('table')
+      ) {
+        renderCalendars();
+        addTableRange();
+      }
+    });
+  });
 });
 
 //* Создание селекта (год)
 function createSelectYears(selectBody) {
-	let selectBodies = document.querySelectorAll(selectBody);
+  let selectBodies = document.querySelectorAll(selectBody);
 
-	selectBodies.forEach((selectBody) => {
-		let minYear = nowYear - 20;
+  selectBodies.forEach((selectBody) => {
+    let minYear = nowYear - 20;
 
-		for (let year = nowYear; year > minYear; year--) {
-			const selectItem = document.createElement('div');
-			selectItem.className = 'select__item';
-			selectItem.textContent = `${year}`;
-			selectBody.append(selectItem);
-		}
-	});
+    for (let year = nowYear; year > minYear; year--) {
+      const selectItem = document.createElement('div');
+      selectItem.className = 'select__item';
+      selectItem.textContent = `${year}`;
+      selectBody.append(selectItem);
+    }
+  });
 }
 
 //* Создание селекта (месяц)
@@ -259,45 +259,45 @@ function createSelectMonth(selectBody) {
 function renderSelects(selectName, selectExtraClass, selectsWrap) {
   const selectsWraps = document.querySelectorAll(selectsWrap);
 
-	selectsWraps.forEach((selectsWrap) => {
-		let currentSelectName = '';
-		let dataSetName = '';
-		const calendarItem = selectsWrap.closest('.calendar-form__item');
-		const isStartCalendar = calendarItem.classList.contains(
-			'calendar-form__item--first'
-		);
-		const isEndCalendar = calendarItem.classList.contains(
-			'calendar-form__item--second'
-		);
-		const isYearSelect = selectName === SELECT_NAME.YEAR;
-		const isMonthSelect = selectName === SELECT_NAME.MONTH;
+  selectsWraps.forEach((selectsWrap) => {
+    let currentSelectName = '';
+    let dataSetName = '';
+    const calendarItem = selectsWrap.closest('.calendar-form__item');
+    const isStartCalendar = calendarItem.classList.contains(
+      'calendar-form__item--first'
+    );
+    const isEndCalendar = calendarItem.classList.contains(
+      'calendar-form__item--second'
+    );
+    const isYearSelect = selectName === SELECT_NAME.YEAR;
+    const isMonthSelect = selectName === SELECT_NAME.MONTH;
 
-		if (isStartCalendar) {
-			if (isYearSelect) {
-				currentSelectName = startDate.year ? startDate.year : selectName;
-				dataSetName = 'year-select';
-			}
-			if (isMonthSelect) {
-				currentSelectName = startDate.month
-					? detectNumberMonth(startDate.month)
-					: selectName;
-				dataSetName = 'month-select';
-			}
-		}
-		if (isEndCalendar) {
-			if (isYearSelect) {
-				currentSelectName = endDate.year ? endDate.year : selectName;
-				dataSetName = 'year-select';
-			}
-			if (isMonthSelect) {
-				currentSelectName = endDate.month
-					? detectNumberMonth(endDate.month)
-					: selectName;
-				dataSetName = 'month-select';
-			}
-		}
+    if (isStartCalendar) {
+      if (isYearSelect) {
+        currentSelectName = startDate.year ? startDate.year : selectName;
+        dataSetName = 'year-select';
+      }
+      if (isMonthSelect) {
+        currentSelectName = startDate.month
+          ? detectNumberMonth(startDate.month)
+          : selectName;
+        dataSetName = 'month-select';
+      }
+    }
+    if (isEndCalendar) {
+      if (isYearSelect) {
+        currentSelectName = endDate.year ? endDate.year : selectName;
+        dataSetName = 'year-select';
+      }
+      if (isMonthSelect) {
+        currentSelectName = endDate.month
+          ? detectNumberMonth(endDate.month)
+          : selectName;
+        dataSetName = 'month-select';
+      }
+    }
 
-		let select = `
+    let select = `
   <div class="calendar__select select" data-${dataSetName}>
     <div class="select__header">
       <button class="select__button select__button--prev btn-reset" type="button"></button>
@@ -593,79 +593,79 @@ function closePopups() {
 
 //* Добавление диапазона в таблицу
 function addTableRange() {
-	const startCellItem = startDate.cellItem;
-	const endCellItem = endDate.cellItem;
-	const startDateDay = startDate.day;
-	const endDateDay = endDate.day;
-	const startDateModal = document.querySelector('.calendar__modal--first');
-	const endDateModal = document.querySelector('.calendar__modal--second');
-	const startCalendarItems = startDateModal.querySelectorAll('td');
-	const endCalendarItems = endDateModal.querySelectorAll('td');
-	const selectedItems = document.querySelectorAll('td.background-cell');
-	const currentItems = document.querySelectorAll('td.current-cell');
+  const startCellItem = startDate.cellItem;
+  const endCellItem = endDate.cellItem;
+  const startDateDay = startDate.day;
+  const endDateDay = endDate.day;
+  const startDateModal = document.querySelector('.calendar__modal--first');
+  const endDateModal = document.querySelector('.calendar__modal--second');
+  const startCalendarItems = startDateModal.querySelectorAll('td');
+  const endCalendarItems = endDateModal.querySelectorAll('td');
+  const selectedItems = document.querySelectorAll('td.background-cell');
+  const currentItems = document.querySelectorAll('td.current-cell');
 
   if (!startCellItem || !endCellItem) return;
 
-	selectedItems.forEach((item) => {
-		item.classList.remove('background-cell');
-	});
-	currentItems.forEach((item) => {
-		item.classList.remove('current-cell');
-	});
+  selectedItems.forEach((item) => {
+    item.classList.remove('background-cell');
+  });
+  currentItems.forEach((item) => {
+    item.classList.remove('current-cell');
+  });
 
-	if (startDate.year === endDate.year && startDate.month === endDate.month) {
-		startCalendarItems.forEach((item) => {
-			if (
-				item.textContent > startDateDay &&
-				item.textContent < endDateDay &&
-				!item.classList.contains('empty-cell')
-			) {
-				item.classList.add('background-cell');
-			} else if (
-				item.textContent == startDateDay ||
-				item.textContent == endDateDay
-			) {
-				item.classList.add('current-cell');
-			}
-		});
-		endCalendarItems.forEach((item) => {
-			if (
-				item.textContent < endDateDay &&
-				item.textContent > startDateDay &&
-				!item.classList.contains('empty-cell')
-			) {
-				item.classList.add('background-cell');
-			} else if (
-				item.textContent == endDateDay ||
-				item.textContent == startDateDay
-			) {
-				item.classList.add('current-cell');
-			}
-		});
-		return;
-	}
+  if (startDate.year === endDate.year && startDate.month === endDate.month) {
+    startCalendarItems.forEach((item) => {
+      if (
+        item.textContent > startDateDay &&
+        item.textContent < endDateDay &&
+        !item.classList.contains('empty-cell')
+      ) {
+        item.classList.add('background-cell');
+      } else if (
+        item.textContent == startDateDay ||
+        item.textContent == endDateDay
+      ) {
+        item.classList.add('current-cell');
+      }
+    });
+    endCalendarItems.forEach((item) => {
+      if (
+        item.textContent < endDateDay &&
+        item.textContent > startDateDay &&
+        !item.classList.contains('empty-cell')
+      ) {
+        item.classList.add('background-cell');
+      } else if (
+        item.textContent == endDateDay ||
+        item.textContent == startDateDay
+      ) {
+        item.classList.add('current-cell');
+      }
+    });
+    return;
+  }
 
-	startCalendarItems.forEach((item) => {
-		if (
-			item.textContent > startDateDay &&
-			!item.classList.contains('empty-cell')
-		) {
-			item.classList.add('background-cell');
-		} else if (item.textContent == startDateDay) {
-			item.classList.add('current-cell');
-		}
-	});
+  startCalendarItems.forEach((item) => {
+    if (
+      item.textContent > startDateDay &&
+      !item.classList.contains('empty-cell')
+    ) {
+      item.classList.add('background-cell');
+    } else if (item.textContent == startDateDay) {
+      item.classList.add('current-cell');
+    }
+  });
 
-	endCalendarItems.forEach((item) => {
-		if (
-			item.textContent < endDateDay &&
-			!item.classList.contains('empty-cell')
-		) {
-			item.classList.add('background-cell');
-		} else if (item.textContent == endDateDay) {
-			item.classList.add('current-cell');
-		}
-	});
+  endCalendarItems.forEach((item) => {
+    if (
+      item.textContent < endDateDay &&
+      !item.classList.contains('empty-cell')
+    ) {
+      item.classList.add('background-cell');
+    } else if (item.textContent == endDateDay) {
+      item.classList.add('current-cell');
+    }
+  });
 }
 
 //* Обработка клика по таблице
@@ -705,7 +705,7 @@ function tableClick(event) {
   addTableRange();
 }
 
-//* Маска
+// * Маска
 window.addEventListener('DOMContentLoaded', () => {
   const inputs = document.querySelectorAll('[data-date-input]');
 
@@ -723,22 +723,22 @@ window.addEventListener('DOMContentLoaded', () => {
       return (input.value = '');
     }
 
-    //* Стирание в середине
-    // if (input.value.length != selectionStart) {
-    // 	if (event.data && /\D/g.test(event.data)) {
-    // 		input.value = inputNumbersValue;
-    // 	}
-    // 	return;
+    // function formattedFix() {
+    //   let dateArr = input.value.split('.');
+    //   let day = dateArr[0];
+    //   let month = dateArr[1];
+    //   let year = dateArr[2];
+
+    //   console.log(day, month, year);
     // }
 
-    //* Оригинал
-    // if (['0', '1', '2'].includes(inputNumbersValue[0])) {
-    // 	formattedInputValue = input.value;
-    // 	if (inputNumbersValue.length > 1) {
-    // 		formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
-    // 	}
-    // } else {
-    // 	input.value = '';
+    // //* Стирание в середине
+    // if (input.value.length != selectionStart) {
+    //   if (event.data && /\D/g.test(event.data)) {
+    //     input.value = inputNumbersValue;
+    //   }
+    //   // input.setSelectionRange(input.value.length, input.value.length);
+    //   return;
     // }
 
     //* Маска для дня
@@ -832,54 +832,6 @@ window.addEventListener('DOMContentLoaded', () => {
       formattedInputValue += inputNumbersValue.substring(4, 9);
       input.value = formattedInputValue;
     }
-
-    // if (['3'].includes(inputNumbersValue[0])) {
-    //   formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
-    //   input.value = formattedInputValue;
-
-    //   input.setSelectionRange(1, 1);
-    //   input.addEventListener('keydown', (e) => {
-    //     if (e.keyCode == 39 && input.value.length < 3) {
-    //       input.value = '0' + formattedInputValue;
-    //     }
-    //   });
-
-    //   if (inputNumbersValue[1] <= 1) {
-    //     formattedInputValue = inputNumbersValue.substring(0, 2) + '.';
-    //   }
-    // }
-
-    if (['0'].includes(inputNumbersValue[2])) {
-      if (inputNumbersValue.length >= 3) {
-        formattedInputValue += inputNumbersValue.substring(2, 3);
-      }
-      if (inputNumbersValue.length >= 4) {
-        formattedInputValue += inputNumbersValue.substring(3, 4) + '.';
-      }
-    }
-
-    if (['1'].includes(inputNumbersValue[2])) {
-      if (inputNumbersValue.length >= 3) {
-        formattedInputValue += inputNumbersValue.substring(2, 3);
-      }
-
-      if (inputNumbersValue[3] <= 2) {
-        if (inputNumbersValue.length >= 4) {
-          formattedInputValue += inputNumbersValue.substring(3, 4) + '.';
-        }
-      }
-    }
-
-    if (['1', '2'].includes(inputNumbersValue[4])) {
-      if (inputNumbersValue.length >= 5) {
-        formattedInputValue += inputNumbersValue.substring(4, 8);
-      }
-      if (inputNumbersValue.length === 8) {
-        enableControlBlock();
-      } else {
-        disableControlBlock();
-      }
-    }
   }
 
   function onDateKeyDown(event) {
@@ -891,18 +843,4 @@ window.addEventListener('DOMContentLoaded', () => {
       event.target.value = event.target.value.substring(0, 5);
     }
   }
-
-  function onDateKeyDown(event) {
-    let inputValue = event.target.value.replace(/\D/g, '');
-    if (event.keyCode == 8 && inputValue.length == 2) {
-      event.target.value = event.target.value.substring(0, 2);
-    }
-    if (event.keyCode == 8 && inputValue.length == 4) {
-      event.target.value = event.target.value.substring(0, 5);
-    }
-  }
-  inputs.forEach((input) => {
-    input.addEventListener('input', onDateInput);
-    input.addEventListener('keydown', onDateKeyDown);
-  });
 });
