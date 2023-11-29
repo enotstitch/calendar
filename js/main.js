@@ -18,6 +18,9 @@ let startDate = {
 	month: '',
 	year: '',
 	cellItem: '',
+	update: () => {
+		sessionStorage.setItem('startDate', JSON.stringify(startDate));
+	},
 };
 
 let endDate = {
@@ -25,7 +28,13 @@ let endDate = {
 	month: nowMonth,
 	year: nowYear,
 	cellItem: '',
+	update: () => {
+		sessionStorage.setItem('endDate', JSON.stringify(endDate));
+	},
 };
+
+startDate.update();
+endDate.update();
 
 const months = {
 	Январь: 1,
@@ -163,10 +172,59 @@ function resetDateInput(calendarItem) {
 	const resetButton = calendarItem.querySelector(
 		'.calendar-date__button-reset'
 	);
+	const isFirstFormItem = currentCalendarInput.closest(
+		'.calendar-form__item--first'
+	);
+	const isSecondFormItem = currentCalendarInput.closest(
+		'.calendar-form__item--second'
+	);
+	const wrapsSelects = document.querySelectorAll('.calendar__selects');
+	let isEmptySelectsWrap = false;
 
 	currentCalendarInput.value = '';
 	calendarItem.classList.remove('calendar-date--white-bg');
 	resetButton.remove();
+
+	if (isFirstFormItem) {
+		startDate = {
+			...startDate,
+			day: '',
+			month: '',
+			year: '',
+			cellItem: '',
+		};
+		renderFirstCalendar();
+		const calendarModal = document.querySelector('.calendar__modal--first');
+		calendarModal.innerHTML = '';
+	}
+	if (isSecondFormItem) {
+		endDate = {
+			...endDate,
+			day: '',
+			month: '',
+			year: '',
+			cellItem: '',
+		};
+		renderSecondCalendar();
+		const calendarModal = document.querySelector('.calendar__modal--second');
+		calendarModal.innerHTML = '';
+	}
+
+	wrapsSelects.forEach((wrapSelects) => {
+		if (!wrapSelects.innerHTML) {
+			isEmptySelectsWrap = true;
+			return;
+		}
+		wrapSelects.innerHTML = '';
+	});
+
+	if (!isEmptySelectsWrap) {
+		renderSelects(SELECT_NAME.YEAR, 'year', '.calendar__selects');
+		renderSelects(SELECT_NAME.MONTH, 'month', '.calendar__selects');
+		createSelectYears('.select__body--year');
+		createSelectMonth('.select__body--month');
+		select();
+	}
 }
 
 //* Рендер по умолчанию
@@ -214,7 +272,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			});
 			if (
 				!event.target.classList.contains('calendar-date__button-reset') &&
-				!event.target.closest('table')
+				!event.target.closest('table') 
 			) {
 				renderCalendars();
 				addTableRange();
@@ -321,7 +379,8 @@ function resetForm(event) {
 	const calendarDates = calendarForm.querySelectorAll('.calendar-date');
 	const wrapsSelects = calendarForm.querySelectorAll('.calendar__selects');
 
-	calendarForm.reset();
+	//! startDate = JSON.parse(sessionStorage.getItem('startDate'));
+	//! endDate = JSON.parse(sessionStorage.getItem('endDate'));
 
 	renderCalendars();
 	startDate.cellItem = '';
@@ -362,21 +421,24 @@ function acceptForm() {
 
 		if (isStartDateInput) {
 			startDate = {
+				...startDate,
 				day: currentDay,
 				month: currentMonth,
 				year: currentYear,
-				...startDate,
 			};
 		}
 
 		if (isEndDateInput) {
 			endDate = {
+				...endDate,
 				day: currentDay,
 				month: currentMonth,
 				year: currentYear,
-				...endDate,
 			};
 		}
+
+		// startDate.update();
+		// endDate.update();
 
 		currentMonth = detectCaseMonth(currentMonth);
 
@@ -578,12 +640,12 @@ function dateInputUpdate(modalElem, dateObject) {
 
 //* Закрытие всех элементов кроме инпутов
 function closePopups() {
-	const selects = document.querySelectorAll('.select');
+	const wrapsSelects = document.querySelectorAll('.calendar__selects');
 	const tables = document.querySelectorAll('table');
 	const controlBlock = document.querySelector('.calendar__control');
 
-	selects.forEach((select) => {
-		select.remove();
+	wrapsSelects.forEach((wrapSelects) => {
+		wrapSelects.innerHTML = '';
 	});
 	tables.forEach((table) => {
 		table.remove();
@@ -676,7 +738,6 @@ function tableClick(event) {
 	const isCellDateClick = !cellValue || cell.nodeName !== 'TD';
 	const isFirstModal = modal.classList.contains('calendar__modal--first');
 	const isSecondModal = modal.classList.contains('calendar__modal--second');
-
 	if (isFirstModal) {
 		startDate.cellItem = cell;
 	}
@@ -739,9 +800,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		if (input.value.length != selectionStart) {
 			if ((selectionStart == 0 || selectionStart == 1) && day.length !== 2) {
+				console.log(1);
+				return;
+			} else if (
+				(selectionStart == 1 || selectionStart == 2) &&
+				day.length === 2
+			) {
+				input.setSelectionRange(3, 3);
+				console.log(2);
 				return;
 			}
 			if ((selectionStart == 3 || selectionStart == 4) && month.length !== 2) {
+				console.log(3);
+				return;
+			} else if (
+				(selectionStart == 4 || selectionStart == 5) &&
+				month.length === 2
+			) {
+				input.setSelectionRange(6, 6);
+				console.log(4);
 				return;
 			}
 			if (
@@ -751,9 +828,11 @@ window.addEventListener('DOMContentLoaded', () => {
 					selectionStart == 9) &&
 				year.length !== 4
 			) {
+				console.log(5);
 				return;
 			}
 
+			console.log(selectionStart);
 			input.setSelectionRange(input.value.length, input.value.length);
 		}
 
@@ -878,8 +957,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 	inputs.forEach((input) => {
-		input.addEventListener('input', onDateInput);
 		input.addEventListener('keydown', onDateKeyDown);
+		input.addEventListener('input', onDateInput);
 		input.addEventListener('keyup', (e) => {
 			if (e.target.value.length === 10) {
 				enableControlBlock();
