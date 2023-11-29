@@ -454,7 +454,7 @@ function acceptForm() {
   });
   disableControlBlock();
   closePopups();
-  checkError();
+  renderError();
 }
 
 //* Рендер контрол. блока
@@ -660,7 +660,7 @@ function closePopups() {
   controlBlock.remove();
 }
 
-function renderError(errorMessage) {
+function showError(errorMessage) {
   const errorWrap = document.querySelector('.calendar__wrap');
 
   const errorItem = document.createElement('p');
@@ -669,7 +669,7 @@ function renderError(errorMessage) {
   errorWrap.append(errorItem);
 }
 
-function checkError() {
+function renderError() {
   let dateStart = startDate;
   let dateEnd = endDate;
 
@@ -682,11 +682,11 @@ function checkError() {
   );
 
   if (equalDateStart > equalDateEnd) {
-    renderError(ERROR_MESSAGE.PERIOD);
+    showError(ERROR_MESSAGE.PERIOD);
   }
 
   if (equalDateStart > now || equalDateEnd > now) {
-    renderError(ERROR_MESSAGE.PRESENT_DAY);
+    showError(ERROR_MESSAGE.PRESENT_DAY);
   }
 }
 
