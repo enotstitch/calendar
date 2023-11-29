@@ -53,6 +53,7 @@ input {
 }
 
 .calendar {
+  position: relative;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -418,5 +419,14 @@ td {
   th {
     width: 61px;
     height: 61px;
+  }
+
+  .calendar__bottom {
+    position: fixed;
+    max-width: 100%;
+    bottom: 15px;
+    right: 0;
+    left: 0;
+    padding: 0 25px;
   }
 }
