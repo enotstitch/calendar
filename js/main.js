@@ -454,6 +454,7 @@ function acceptForm() {
   });
   disableControlBlock();
   closePopups();
+  checkError();
 }
 
 //* Рендер контрол. блока
@@ -666,6 +667,27 @@ function renderError(errorMessage) {
   errorItem.className = 'calendar__error';
   errorItem.textContent = `${errorMessage}`;
   errorWrap.append(errorItem);
+}
+
+function checkError() {
+  let dateStart = startDate;
+  let dateEnd = endDate;
+
+  const equalDateEnd = new Date(
+    `${dateEnd.month}.${dateEnd.day}.${dateEnd.year}`
+  );
+
+  const equalDateStart = new Date(
+    `${dateStart.month}.${dateStart.day}.${dateStart.year}`
+  );
+
+  if (equalDateStart > equalDateEnd) {
+    renderError(ERROR_MESSAGE.PERIOD);
+  }
+
+  if (equalDateStart > now || equalDateEnd > now) {
+    renderError(ERROR_MESSAGE.PRESENT_DAY);
+  }
 }
 
 //* Добавление диапазона в таблицу
