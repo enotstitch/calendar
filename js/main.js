@@ -307,7 +307,6 @@ function createSelectMonth(selectBody) {
 
 	selectBodies.forEach((selectBody) => {
 		const currentSelect = selectBody.closest('.select');
-		currentSelect.classList.add('disabled');
 		for (const month in months) {
 			const selectItem = document.createElement('div');
 			selectItem.className = 'select__item';
@@ -324,6 +323,7 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
 	selectsWraps.forEach((selectsWrap) => {
 		let currentSelectName = '';
 		let dataSetName = '';
+		let isDisabledSelect = false;
 		const calendarItem = selectsWrap.closest('.calendar-form__item');
 		const isStartCalendar = calendarItem.classList.contains(
 			'calendar-form__item--first'
@@ -336,42 +336,59 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
 
 		if (isStartCalendar) {
 			if (isYearSelect) {
-				currentSelectName = startDate.year ? startDate.year : selectName;
+				if (startDate.year) {
+					currentSelectName = startDate.year;
+				} else {
+					currentSelectName = selectName;
+				}
 				dataSetName = 'year-select';
 			}
 			if (isMonthSelect) {
-				currentSelectName = startDate.month
-					? detectNumberMonth(startDate.month)
-					: selectName;
+				if (startDate.month) {
+					currentSelectName = detectNumberMonth(startDate.month);
+				} else {
+					currentSelectName = selectName;
+					isDisabledSelect = true;
+				}
 				dataSetName = 'month-select';
 			}
 		}
 		if (isEndCalendar) {
 			if (isYearSelect) {
-				currentSelectName = endDate.year ? endDate.year : selectName;
+				if (endDate.year) {
+					currentSelectName = endDate.year;
+				} else {
+					currentSelectName = selectName;
+				}
 				dataSetName = 'year-select';
 			}
 			if (isMonthSelect) {
-				currentSelectName = endDate.month
-					? detectNumberMonth(endDate.month)
-					: selectName;
+				if (endDate.month) {
+					currentSelectName = detectNumberMonth(endDate.month);
+				} else {
+					currentSelectName = selectName;
+					isDisabledSelect = true;
+				}
 				dataSetName = 'month-select';
 			}
 		}
 
 		let select = `
-  <div class="calendar__select select" data-${dataSetName}>
+    <div class="calendar__select select ${
+			isDisabledSelect ? 'disabled' : ''
+		}" data-${dataSetName}>
     <div class="select__header">
-      <button class="select__button select__button--prev btn-reset" type="button"></button>
-      <div class="select__current select-current">
-        <span class="select-current__text select-current__text--${selectExtraClass}">${currentSelectName}</span>
+    <button class="select__button select__button--prev btn-reset" type="button"></button>
+    <div class="select__current select-current">
+    <span class="select-current__text select-current__text--${selectExtraClass}">${currentSelectName}</span>
         <img class="select-current__arrow" src="./icons/arrow.svg" alt="Стрелочка">
-      </div>
-      <button class="select__button select__button--next btn-reset" type="button"></button>
-    </div>
-    <div class="select__body select__body--${selectExtraClass}"></div>
-  </div>
-	`;
+        </div>
+        <button class="select__button select__button--next btn-reset" type="button"></button>
+        </div>
+        <div class="select__body select__body--${selectExtraClass}"></div>
+        </div>
+        `;
+		console.log(select);
 
 		selectsWrap.innerHTML += select;
 	});
