@@ -645,7 +645,7 @@ function setInputFormattedDate(modalElem, dateObject) {
 	const modal = document.querySelector(modalElem);
 	const formItem = modal.closest('.calendar-form__item');
 	const input = formItem.querySelector('.calendar-date__input');
-	const currentDay = numNormalize(dateObject.day);
+	const currentDay = dateObject.day;
 	const currentMonth = detectCaseMonth(dateObject.month);
 	const currentYear = dateObject.year;
 
@@ -715,18 +715,42 @@ function clearError() {
 
 //* Добавление диапазона в таблицу
 function addTableRange() {
-	const startCellItem = startDate.cellItem;
-	const endCellItem = endDate.cellItem;
+	let currentStartCell;
+	let currentEndCell;
 	const startDateDay = startDate.day;
 	const endDateDay = endDate.day;
 	const startDateModal = document.querySelector('.calendar__modal--first');
 	const endDateModal = document.querySelector('.calendar__modal--second');
+	const startCellItems = startDateModal.querySelectorAll('td');
+	const endCellItems = endDateModal.querySelectorAll('td');
 	const startCalendarItems = startDateModal.querySelectorAll('td');
 	const endCalendarItems = endDateModal.querySelectorAll('td');
 	const selectedItems = document.querySelectorAll('td.background-cell');
 	const currentItems = document.querySelectorAll('td.current-cell');
 
-	if (!startCellItem || !endCellItem) return;
+	startCellItems.forEach((item) => {
+		if (item.textContent && item.textContent == startDateDay) {
+			currentStartCell = item;
+		}
+	});
+
+	endCellItems.forEach((item) => {
+		if (item.textContent && item.textContent == endDateDay) {
+			currentEndCell = item;
+		}
+	});
+
+	if (currentStartCell) {
+		currentStartCell.classList.add('current-cell');
+	}
+
+	if (currentEndCell) {
+		currentEndCell.classList.add('current-cell');
+	}
+
+	if (!currentStartCell || !currentEndCell) return;
+
+	console.log(2);
 
 	selectedItems.forEach((item) => {
 		item.classList.remove('background-cell');
