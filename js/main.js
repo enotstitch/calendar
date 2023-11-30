@@ -1,6 +1,7 @@
 import select from './select.js';
 
 const calendars = document.querySelectorAll('.calendar-date');
+const calendarWrap = document.querySelector('.calendar__wrap');
 const calendarItems = document.querySelectorAll('.calendar-form__item');
 
 const SELECT_NAME = {
@@ -231,6 +232,8 @@ function resetDateInput(calendarItem) {
     createSelectMonth('.select__body--month');
     select();
   }
+  clearError();
+  renderError();
 }
 
 //* Рендер по умолчанию
@@ -454,6 +457,8 @@ function acceptForm() {
   });
   disableControlBlock();
   closePopups();
+  clearError();
+  renderError();
 }
 
 //* Рендер контрол. блока
@@ -530,7 +535,7 @@ calendars.forEach((calendar) => {
     calendar.classList.add('calendar-date--white-bg');
   });
 
-  //* Обработка клика по таблице
+  //* Обработка клика по календарю
   calendar.addEventListener('click', (event) => {
     const isResetBtnClick = event.target.classList.contains(
       'calendar-date__button-reset'
@@ -563,6 +568,8 @@ calendars.forEach((calendar) => {
     wrapsSelects.forEach((wrapSelects) => {
       wrapSelects.innerHTML = '';
     });
+
+    clearError();
 
     renderSelects(SELECT_NAME.YEAR, 'year', '.calendar__selects');
     renderSelects(SELECT_NAME.MONTH, 'month', '.calendar__selects');
@@ -659,13 +666,47 @@ function closePopups() {
   controlBlock.remove();
 }
 
-function renderError(errorMessage) {
-  const errorWrap = document.querySelector('.calendar__wrap');
-
+// * Создание ошибки
+function showError(errorMessage) {
   const errorItem = document.createElement('p');
   errorItem.className = 'calendar__error';
   errorItem.textContent = `${errorMessage}`;
-  errorWrap.append(errorItem);
+  calendarWrap.append(errorItem);
+}
+
+// * Рендер ошибки
+function renderError() {
+  let dateStart = startDate;
+  let dateEnd = endDate;
+
+  const equalDateEnd = new Date(
+    `${dateEnd.month}.${dateEnd.day}.${dateEnd.year}`
+  );
+
+  const equalDateStart = new Date(
+    `${dateStart.month}.${dateStart.day}.${dateStart.year}`
+  );
+
+  if (equalDateStart > equalDateEnd) {
+    showError(ERROR_MESSAGE.PERIOD);
+  }
+
+  if (equalDateStart > now || equalDateEnd > now) {
+    showError(ERROR_MESSAGE.PRESENT_DAY);
+  }
+}
+
+// * Очистка ошибки
+function clearError() {
+  const errorItems = calendarWrap.querySelectorAll('.calendar__error');
+  // const errorItems = calendarWrap.querySelectorAll('.calendar__error');
+
+  errorItems.forEach((errorItem) => {
+    if (errorItem) {
+      errorItem.remove();
+      console.log(42);
+    }
+  });
 }
 
 //* Добавление диапазона в таблицу
