@@ -1,7 +1,7 @@
 import select from './select.js';
 
 const calendars = document.querySelectorAll('.calendar-date');
-const calendarWrap = document.querySelector('.calendar__wrap');
+const calendarError = document.querySelector('.calendar-error');
 const calendarItems = document.querySelectorAll('.calendar-form__item');
 
 const SELECT_NAME = {
@@ -669,9 +669,9 @@ function closePopups() {
 // * Создание ошибки
 function showError(errorMessage) {
   const errorItem = document.createElement('p');
-  errorItem.className = 'calendar__error';
+  errorItem.className = 'calendar-error__item';
   errorItem.textContent = `${errorMessage}`;
-  calendarWrap.append(errorItem);
+  calendarError.append(errorItem);
 }
 
 // * Рендер ошибки
@@ -698,13 +698,11 @@ function renderError() {
 
 // * Очистка ошибки
 function clearError() {
-  const errorItems = calendarWrap.querySelectorAll('.calendar__error');
-  // const errorItems = calendarWrap.querySelectorAll('.calendar__error');
+  const errorItems = calendarError.querySelectorAll('.calendar-error__item');
 
   errorItems.forEach((errorItem) => {
     if (errorItem) {
       errorItem.remove();
-      console.log(42);
     }
   });
 }
