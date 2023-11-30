@@ -20,14 +20,15 @@ const nowDay = now.getDate();
 const nowMonth = now.getMonth() + 1;
 const nowYear = now.getFullYear();
 
+function updateDateObj(storageItemName, dateObj) {
+	sessionStorage.setItem(storageItemName, JSON.stringify(dateObj));
+}
+
 let startDate = {
 	day: '',
 	month: '',
 	year: '',
 	cellItem: '',
-	update: () => {
-		sessionStorage.setItem('startDate', JSON.stringify(startDate));
-	},
 };
 
 let endDate = {
@@ -35,13 +36,7 @@ let endDate = {
 	month: nowMonth,
 	year: nowYear,
 	cellItem: '',
-	update: () => {
-		sessionStorage.setItem('endDate', JSON.stringify(endDate));
-	},
 };
-
-startDate.update();
-endDate.update();
 
 const months = {
 	Январь: 1,
@@ -441,8 +436,8 @@ function acceptForm() {
 			};
 		}
 
-		startDate.update();
-		endDate.update();
+		updateDateObj('startDate', startDate);
+		updateDateObj('endDate', endDate);
 
 		currentMonth = detectCaseMonth(currentMonth);
 
