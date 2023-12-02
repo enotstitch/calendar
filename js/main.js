@@ -1,8 +1,15 @@
 import select from './select.js';
 
+const calendar = document.querySelector('.calendar');
 const calendars = document.querySelectorAll('.calendar-date');
 const calendarError = document.querySelector('.calendar-error');
 const calendarItems = document.querySelectorAll('.calendar-form__item');
+const calendarFirstItem = document.querySelector('.calendar-form__item--first');
+const calendarSecondItem = document.querySelector(
+  '.calendar-form__item--second'
+);
+
+const screenWidth = window.screen.width;
 
 const SELECT_NAME = {
   YEAR: 'Выберите год',
@@ -238,6 +245,10 @@ function resetDateInput(calendarItem) {
 
 //* Рендер по умолчанию
 window.addEventListener('DOMContentLoaded', () => {
+  if (screenWidth <= 640) {
+    renderHeaderCalendar('Выберите период');
+  }
+
   const dateEndInput = document.querySelector('[data-date-end]');
   const monthName = detectCaseMonth(nowMonth);
 
@@ -290,6 +301,27 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+if (screenWidth <= 640) {
+  calendarItems.forEach((calendarItem) => {
+    calendarItem.addEventListener('click', (event) => {
+      const isClickFirstCalendar = event.target.closest(
+        '.calendar-form__item--first'
+      );
+      const isClickSecondCalendar = event.target.closest(
+        '.calendar-form__item--second'
+      );
+
+      if (isClickFirstCalendar) {
+        calendarSecondItem.style.display = 'none';
+      }
+
+      if (isClickSecondCalendar) {
+        calendarFirstItem.style.display = 'none';
+      }
+    });
+  });
+}
+
 //* Создание селекта (год)
 function createSelectYears(selectBody) {
   let selectBodies = document.querySelectorAll(selectBody);
@@ -325,6 +357,11 @@ function createSelectMonth(selectBody) {
 //* Рендер селектов
 function renderSelects(selectName, selectExtraClass, selectsWrap) {
   const selectsWraps = document.querySelectorAll(selectsWrap);
+  let mobileClass = '';
+
+  if (screenWidth < 640) {
+    mobileClass = 'select--mobile';
+  }
 
   selectsWraps.forEach((selectsWrap) => {
     let currentSelectName = '';
@@ -338,6 +375,13 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
     );
     const isYearSelect = selectName === SELECT_NAME.YEAR;
     const isMonthSelect = selectName === SELECT_NAME.MONTH;
+    let maxLength = '';
+
+    if (isYearSelect) {
+      maxLength = '4';
+    } else if (isMonthSelect) {
+      maxLength = '8';
+    }
 
     if (isStartCalendar) {
       if (isYearSelect) {
@@ -364,8 +408,14 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
       }
     }
 
+    let searchSelect = `
+    <div class="calendar__search calendar-search">
+      <input class="calendar-search__input" type="tel" placeholder="Поиск" maxlength=${maxLength}>
+    </div>
+    `;
+
     let select = `
-  <div class="calendar__select select" data-${dataSetName}>
+  <div class="calendar__select select ${mobileClass}" data-${dataSetName}>
     <div class="select__header">
       <button class="select__button select__button--prev btn-reset" type="button"></button>
       <div class="select__current select-current">
@@ -374,7 +424,9 @@ function renderSelects(selectName, selectExtraClass, selectsWrap) {
       </div>
       <button class="select__button select__button--next btn-reset" type="button"></button>
     </div>
-    <div class="select__body select__body--${selectExtraClass}"></div>
+    <div class="select__body select__body--${selectExtraClass}">
+      ${screenWidth <= 640 ? searchSelect : ''}
+    </div>
   </div>
 	`;
 
@@ -577,6 +629,7 @@ calendars.forEach((calendar) => {
     createSelectYears('.select__body--year');
     createSelectMonth('.select__body--month');
     select();
+
     renderControlBlock();
     addTableRange();
   });
@@ -1022,3 +1075,71 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// // * Мобильная версия
+// if (screenWidth <= 768) {
+//   calendarItems.forEach((calendarItem) => {
+//     calendarItem.addEventListener('click', (event) => {
+//       const calendarHeader = document.querySelector('.calendar-header');
+//       const isClickFirstCalendar = event.target.closest(
+//         '.calendar-form__item--first'
+//       );
+//       const isClickSecondCalendar = event.target.closest(
+//         '.calendar-form__item--second'
+//       );
+
+//       // ? Перенести в селекты изначально при мобильном разрешении
+//       const selectBodies = document.querySelectorAll('.select__body');
+//       selectBodies.forEach((selectBody) => {
+//         selectBody.style.display = 'none';
+//       });
+//       // ?
+
+//       if (calendarHeader) {
+//         calendarHeader.remove();
+//       }
+
+//       renderHeaderCalendar('Выберите период');
+
+//       if (isClickFirstCalendar) {
+//         calendarSecondItem.style.display = 'none';
+//       }
+
+//       if (isClickSecondCalendar) {
+//         calendarFirstItem.style.display = 'none';
+//       }
+//     });
+//   });
+// }
+
+// * Функция закрытия активных селектов
+function closeActivePopups() {
+  const wrapSelects = document.querySelector('.calendar__selects');
+  const selectItems = wrapSelects.querySelectorAll('.select');
+
+  selectItems.forEach((selectItem) => {
+    if (selectItem.classList.contains('is-active')) {
+      selectItem.classList.remove('is-active');
+    }
+  });
+}
+
+function renderHeaderCalendar(headerTitle) {
+  const headerCalendar = document.createElement('div');
+  headerCalendar.className = 'calendar__header calendar-header';
+
+  const headerCalendarBtnPrev = document.createElement('button');
+  headerCalendarBtnPrev.className = 'calendar-header__prev btn-reset';
+  headerCalendar.append(headerCalendarBtnPrev);
+
+  const headerCalendarTitle = document.createElement('p');
+  headerCalendarTitle.className = 'calendar-header__title';
+  headerCalendarTitle.textContent = `${headerTitle}`;
+  headerCalendar.append(headerCalendarTitle);
+
+  const headerCalendarBtnClose = document.createElement('button');
+  headerCalendarBtnClose.className = 'calendar-header__close btn-reset';
+  headerCalendar.append(headerCalendarBtnClose);
+
+  calendar.prepend(headerCalendar);
+}
