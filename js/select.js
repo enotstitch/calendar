@@ -1,5 +1,8 @@
 const now = new Date();
 const nowYear = now.getFullYear();
+const nowMonth = now.getMonth() + 1;
+let currentYear = nowYear;
+let currentMonth = nowMonth;
 
 const month = [
 	'Январь',
@@ -15,6 +18,8 @@ const month = [
 	'Ноябрь',
 	'Декабрь',
 ];
+
+const indexOfMonth = month.indexOf(nowMonth);
 
 const years = [];
 
@@ -94,8 +99,13 @@ let select = function () {
 			try {
 				if (isYearSelect) {
 					currentSelectText.textContent = currentSelectItems[--i].textContent;
+					currentYear++;
 				} else if (isMonthSelect) {
+					if (currentYear == nowYear && currentMonth == nowMonth) {
+						return;
+					}
 					currentSelectText.textContent = currentSelectItems[++i].textContent;
+					currentMonth++;
 				}
 				const disabledSelect = selectWrap.querySelector('.disabled');
 				try {
@@ -131,8 +141,10 @@ let select = function () {
 			try {
 				if (isYearSelect) {
 					currentSelectText.textContent = currentSelectItems[++i].textContent;
+					currentYear--;
 				} else if (isMonthSelect) {
 					currentSelectText.textContent = currentSelectItems[--i].textContent;
+					currentMonth--;
 				}
 				const disabledSelect = selectWrap.querySelector('.disabled');
 				try {
