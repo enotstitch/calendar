@@ -39,14 +39,12 @@ let select = function () {
 
 	window.addEventListener('click', (event) => {
 		try {
-			const selects = document.querySelectorAll('.select');
-			selects.forEach((select) => {
-				const isSelectActive = select.classList.contains('is-active');
-				const isCurrentSelectClick = event.target.closest('.select') == select;
-				if (isSelectActive && !isCurrentSelectClick) {
-					select.classList.remove('is-active');
-				}
-			});
+			const select = document.querySelector('.select');
+			const isSelectActive = select.classList.contains('is-active');
+			const isSelectClick = event.target.closest('.select');
+			if (isSelectActive && !isSelectClick) {
+				select.classList.remove('is-active');
+			}
 		} catch {}
 	});
 
