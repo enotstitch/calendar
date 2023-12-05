@@ -956,7 +956,10 @@ window.addEventListener('DOMContentLoaded', () => {
 		if (input.value.length != selectionStart) {
 			if ((selectionStart == 0 || selectionStart == 1) && day.length !== 2) {
 				return;
-			} else if (selectionStart == 2 && day.length === 2) {
+			} else if (
+				(selectionStart == 1 || selectionStart == 2) &&
+				day.length === 2
+			) {
 				input.setSelectionRange(3, 3);
 				return;
 			}
@@ -979,9 +982,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				return;
 			}
 
-			if (selectionStart != 1 && selectionStart != 4) {
-				input.setSelectionRange(input.value.length, input.value.length);
-			}
+			input.setSelectionRange(input.value.length, input.value.length);
 		}
 
 		//* Стирание в середине
@@ -1009,7 +1010,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			if (inputNumbersValue.length < 2) {
 				input.setSelectionRange(1, 1);
-			} else if (selectionStart != 1) {
+			} else {
 				input.setSelectionRange(input.value.length, input.value.length);
 			}
 
@@ -1024,7 +1025,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			if (inputNumbersValue.length < 2) {
 				input.setSelectionRange(1, 1);
-			} else if (selectionStart != 1) {
+			} else {
 				input.setSelectionRange(input.value.length, input.value.length);
 			}
 
@@ -1119,7 +1120,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		const year = +dateArr[2];
 
 		if (input.value.length === 10) {
-			renderControlBlock();
+			enableControlBlock();
 
 			if (isFirstCalendar) {
 				startDate = {
@@ -1147,14 +1148,23 @@ window.addEventListener('DOMContentLoaded', () => {
 			createSelectMonth('.select__body--month');
 			select();
 			renderCalendars();
-			enableControlBlock();
 			addTableRange();
 		} else {
 			disableControlBlock();
 		}
 	}
 
+	function onDateKeyDown(event) {
+		let inputValue = event.target.value.replace(/\D/g, '');
+		if (event.keyCode == 8 && inputValue.length == 2) {
+			event.target.value = event.target.value.substring(0, 2);
+		}
+		if (event.keyCode == 8 && inputValue.length == 4) {
+			event.target.value = event.target.value.substring(0, 5);
+		}
+	}
 	inputs.forEach((input) => {
+		input.addEventListener('keydown', onDateKeyDown);
 		input.addEventListener('input', onDateInput);
 		input.addEventListener('keyup', handleKeyUp);
 	});
