@@ -279,6 +279,10 @@ input {
   background-color: #eff0f0;
 }
 
+.select__item--hide {
+  display: none;
+}
+
 .select.is-active .select__body {
   display: block;
   width: 100%;
