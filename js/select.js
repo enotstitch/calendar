@@ -50,7 +50,6 @@ let select = function () {
           let currentValue = this.value.trim();
 
           if (currentValue) {
-            console.log(currentValue);
             listSearch.forEach((listItem) => {
               if (listItem.innerText.search(currentValue) == -1) {
                 listItem.classList.add('select__item--hide');

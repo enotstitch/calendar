@@ -1125,6 +1125,11 @@ function closeActivePopups() {
 }
 
 function renderHeaderCalendar(headerTitle) {
+  try {
+    const headerActive = document.querySelector('.calendar-header');
+    headerActive.remove();
+  } catch {}
+
   const headerCalendar = document.createElement('div');
   headerCalendar.className = 'calendar__header calendar-header';
 
